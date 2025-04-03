@@ -6,7 +6,7 @@
                 <InputIcon class="pi pi-search" />
             </IconField>
         </div>
-        <Button class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+        <Button @click="visibleAddProduct = true" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
             <i class="pi pi-plus"></i>
             <span class="hidden sm:inline">Maxsulot Qo'shish</span>
         </Button>
@@ -16,6 +16,9 @@
         <BarnCard v-for="item in filteredData" :key="item.id" :item="item" @getProduct="getProduct" />
         <CardSkeleton v-if="isloading" />
     </div>
+    <Drawer v-model:visible="visibleAddProduct" header="Mahsulot Qo'shish" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
+        <AddProductForm @getProduct="getProduct"></AddProductForm>
+    </Drawer>
 </template>
 
 <script setup>
@@ -23,10 +26,12 @@ import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
 import BarnCard from '../../components/BarnComponents/BarnCard.vue';
 import CardSkeleton from '../../components/BarnComponents/BarnCardSkeleton.vue';
+import AddProductForm from '../../components/BarnComponents/BarnProduct/AddProduct.vue'
 
 const data = ref([]);
 const searchQuery = ref(''); // Qidiruv maydoni uchun
 const isloading = ref(true);
+const visibleAddProduct = ref(false);
 
 // API dan ma'lumotlarni olish
 const getProduct = async () => {

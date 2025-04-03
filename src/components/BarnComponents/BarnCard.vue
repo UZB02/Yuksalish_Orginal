@@ -40,41 +40,98 @@
             </div>
         </template>
     </Card>
+    <!--Begin Delete Modal -->
+    <Dialog header="O'chirish" v-model:visible="deletModal" :style="{ width: '350px' }" :modal="true">
+        <div class="flex items-center justify-center">
+            <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem" />
+            <span>O'chirishga ishonchingiz komilmi?</span>
+        </div>
+        <template #footer>
+            <Button label="Yo'q" icon="pi pi-times" @click="closeDeletModal" text severity="secondary" />
+            <Button :label="isLoading ? 'Loading...' : 'O\'chirish'" icon="pi pi-trash" @click="deletProductById()" severity="danger" outlined autofocus />
+        </template>
+    </Dialog>
+    <!--End Delete Modal -->
+    <!-- Begin Edit -->
+    <Drawer v-model:visible="visibleEditProduct" header="Mahsulot Taxrirlash" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
+        <EditProduct :product="product" @getProduct="emits"></EditProduct>
+    </Drawer>
+    <!-- End Edit -->
 </template>
 
 <script setup>
+import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import formatCurrency from '../../utils/PriceFormatter';
+import EditProduct from '../BarnComponents/BarnProduct/EditProduct.vue';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
 
 const props = defineProps({ item: {} });
 const emits = defineEmits(['getProduct']);
-const productId = ref(null);
+const product = ref({});
+const deletModal = ref(false);
+const toast = useToast();
+const visibleEditProduct = ref(false);
+const isLoading = ref(false);
 
 // Har bir menu komponentini indeks orqali topamiz
 const toggleMenu = (event, index, item) => {
-    productId.value = item._id;
+    product.value = item;
     if (menu.value[index]) {
         menu.value[index].toggle(event);
     } else {
         console.error('Menu component is not properly initialized.');
     }
 };
+const deletProductModal = () => {
+    deletModal.value = true;
+};
 
+function closeDeletModal() {
+    deletModal.value = false;
+}
 const overlayMenuItems = ref([
     {
         label: 'Batafsil',
         icon: 'pi pi-eye',
         command: () => {
-            router.push(`/barn/product/${productId.value}`);
+            router.push(`/barn/product/${product.value._id}`);
         }
     },
-    { label: 'Taxrirlash', icon: 'pi pi-refresh' },
-    { label: "O'chirish", icon: 'pi pi-trash' },
+    {
+        label: 'Taxrirlash',
+        icon: 'pi pi-refresh',
+        command: () => {
+            visibleEditProduct.value = true;
+        }
+    },
+    {
+        label: "O'chirish",
+        icon: 'pi pi-trash',
+        command: () => {
+            deletProductModal();
+        }
+    },
     { separator: true },
     { label: 'Home', icon: 'pi pi-home' }
 ]);
+
+const deletProductById = async () => {
+    isLoading.value = true;
+    try {
+        const res = await axios.delete(`/api/product/${product.value._id}`);
+        if (res.status == 200) {
+            isLoading.value = false;
+            toast.add({ severity: 'success', summary: "O'chirildi", detail: "Mahsulot o'chirildi", life: 3000 });
+            deletModal.value = false;
+            emits('getProduct');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
 </script>
