@@ -7,7 +7,7 @@
     left: 0;
     top: 0;
     width: 100%;
-    padding: 0 2rem;
+    padding: 0 10px;
     background-color: var(--surface-card);
     transition: left var(--layout-section-transition-duration);
     display: flex;
@@ -98,7 +98,7 @@
 
 @media (max-width: 991px) {
     .layout-topbar {
-        padding: 0 2rem;
+        padding: 0 10px;
 
         .layout-topbar-logo-container {
             width: auto;

@@ -5,13 +5,15 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Home',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+        label: 'Asosiy',
+        items: [
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Ombor', icon: 'pi pi-fw pi-warehouse', to: '/barn' }
+        ]
     },
     {
         label: 'UI Components',
         items: [
-            { label: 'Ombor', icon: 'pi pi-fw pi-warehouse', to: '/barn' },
             { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
             { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
             { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },

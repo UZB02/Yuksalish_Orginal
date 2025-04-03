@@ -16,7 +16,12 @@ const router = createRouter({
                 {
                     path: '/barn',
                     name: 'barn',
-                    component: () => import('../views/BarnView.vue')
+                    component: () => import('../views/Barn/BarnView.vue')
+                },
+                {
+                    path: '/barn/product/:id',
+                    name: 'ProductId',
+                    component: () => import('../views/Barn/BarnProductIdView.vue')
                 },
                 {
                     path: '/uikit/formlayout',
