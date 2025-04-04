@@ -54,7 +54,25 @@
     <!--End Delete Modal -->
     <!-- Begin Edit -->
     <Drawer v-model:visible="visibleEditProduct" header="Mahsulot Taxrirlash" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
-        <EditProduct :product="product" @getProduct="emits"></EditProduct>
+        <div class="grid grid-cols-1 gap-2">
+            <span class="grid grid-cols-1 gap-2">
+                <label for="Name">Mahsulot nomi</label>
+                <InputText type="text" id="Name" v-model="editproduct.name" />
+            </span>
+            <span class="grid grid-cols-1 gap-2">
+                <label for="size">Miqdori (Kg)</label>
+                <InputNumber type="number" id="size" v-model="editproduct.size" />
+            </span>
+            <span class="grid grid-cols-1 gap-2">
+                <label for="price">Sotib olish narxi</label>
+                <InputNumber type="number" id="price" v-model="editproduct.price" />
+            </span>
+            <span class="grid grid-cols-1 gap-2">
+                <label for="buyyingPrice">Sotish narxi</label>
+                <InputNumber type="number" id="buyyingPrice" v-model="editproduct.buyyingPrice" />
+            </span>
+            <Button @click="editProductById()" :label="isLoading ? 'Yuklanmoqda...' : 'Taxrirlash'"></Button>
+        </div>
     </Drawer>
     <!-- End Edit -->
 </template>
@@ -65,7 +83,6 @@ import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import formatCurrency from '../../utils/PriceFormatter';
-import EditProduct from '../BarnComponents/BarnProduct/EditProduct.vue';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
@@ -77,10 +94,26 @@ const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
 const isLoading = ref(false);
+const editproduct = ref({
+    id: null,
+    name: '',
+    price: '',
+    currency: 'UZS',
+    buyyingPrice: '',
+    size: ''
+});
 
 // Har bir menu komponentini indeks orqali topamiz
 const toggleMenu = (event, index, item) => {
     product.value = item;
+    editproduct.value = {
+        id: item._id,
+        name: item.name,
+        price: item.price,
+        buyyingPrice: item.buyyingPrice,
+        size: item.size
+    };
+    console.log(product.value);
     if (menu.value[index]) {
         menu.value[index].toggle(event);
     } else {
@@ -131,6 +164,28 @@ const deletProductById = async () => {
             emits('getProduct');
         }
     } catch (error) {
+        console.log(error);
+    }
+};
+
+const editProductById = async () => {
+    isLoading.value = true;
+    try {
+        const res = await axios.put(`/api/product/${editproduct.value.id}`, {
+            _id: editproduct.value.id,
+            name: editproduct.value.name,
+            size: editproduct.value.size,
+            price: editproduct.value.price,
+            buyyingPrice: editproduct.value.buyyingPrice
+        });
+        if (res.status == 200) {
+            isLoading.value = false;
+            visibleEditProduct.value = false;
+            emits('getProduct');
+            toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Taxrirlandi', life: 3000 });
+        }
+    } catch (error) {
+        isLoading.value = false;
         console.log(error);
     }
 };
