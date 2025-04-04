@@ -15,7 +15,7 @@
                     <div class="flex justify-between">
                         <div class="">
                             <p class="text-[10px] uppercase text-gray-400">Miqdor</p>
-                            <p class="font-medium" style="line-height: 0">{{ item?.size }} kg</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatNumber(item?.size) }} kg</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Jami Summa</p>
@@ -25,11 +25,11 @@
                     <div class="flex justify-between">
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Sotib olish narxi</p>
-                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">1-kg sotilish narxi</p>
-                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
+                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,8 @@ import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
-import formatCurrency from '../../utils/PriceFormatter';
+import formatCurrency from '../../utils/PriceFormatter.js';
+import formatNumber from '@/utils/NumberFormatter.js';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz

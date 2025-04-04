@@ -40,6 +40,7 @@ const getProduct = async () => {
         data.value = res.data;
         if (res.status == 200) {
             isloading.value = false;
+            visibleAddProduct.value = false;
         }
     } catch (error) {
         console.log(error);
