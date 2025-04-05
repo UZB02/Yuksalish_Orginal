@@ -76,7 +76,7 @@
     </Drawer>
     <!-- End Edit -->
     <!-- Begin Edit -->
-    <Drawer v-model:visible="visibleAddProductById " header="Mahsulot Taxrirlash" position="right" class="!w-full md:!w-100 lg:!w-[100%]">
+    <Drawer v-model:visible="visibleAddProductById " :header="product.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-100 lg:!w-[100%]">
         <AddProductById :product="product" @closeAddModal='closeAddModal'></AddProductById>
     </Drawer>
     <!-- End Edit -->
