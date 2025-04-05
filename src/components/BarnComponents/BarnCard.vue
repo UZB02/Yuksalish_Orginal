@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <Button type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                    <Button @click="addProductByIdModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                     <Button type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                 </div>
             </div>
@@ -75,6 +75,11 @@
         </div>
     </Drawer>
     <!-- End Edit -->
+    <!-- Begin Edit -->
+    <Drawer v-model:visible="visibleAddProductById " header="Mahsulot Taxrirlash" position="right" class="!w-full md:!w-100 lg:!w-[100%]">
+        <AddProductById :product="product" @closeAddModal='closeAddModal'></AddProductById>
+    </Drawer>
+    <!-- End Edit -->
 </template>
 
 <script setup>
@@ -84,6 +89,7 @@ import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import formatCurrency from '../../utils/PriceFormatter.js';
 import formatNumber from '@/utils/NumberFormatter.js';
+import AddProductById from './BarnProduct/AddProductById.vue'
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
@@ -94,6 +100,7 @@ const product = ref({});
 const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
+const visibleAddProductById  = ref(false);
 const isLoading = ref(false);
 const editproduct = ref({
     id: null,
@@ -190,4 +197,14 @@ const editProductById = async () => {
         console.log(error);
     }
 };
+
+const addProductByIdModalOpen=(item)=>{
+    visibleAddProductById .value = true;
+    console.log(item._id);
+    product.value=item
+}
+
+const closeAddModal=()=>{
+    visibleAddProductById .value = false;
+}
 </script>
