@@ -156,8 +156,8 @@ const overlayMenuItems = ref([
             deletProductModal();
         }
     },
-    { separator: true },
-    { label: 'Home', icon: 'pi pi-home' }
+    // { separator: true },
+    // { label: 'Home', icon: 'pi pi-home' }
 ]);
 
 const deletProductById = async () => {
