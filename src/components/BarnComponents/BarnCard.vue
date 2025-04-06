@@ -1,17 +1,16 @@
 <template>
     <Card style="border-radius: 6px">
         <template #title>
-            <div class="flex justify-between items-center border-b-2 pb-2">
+            <div class="flex justify-between items-center border-b-2 dark:border-gray-600 pb-2">
                 <h5 style="margin: 0">{{ item?.name }}</h5>
                 <!-- Har bir menu uchun alohida ref beriladi -->
                 <Menu :ref="(el) => (menu[index] = el)" :model="overlayMenuItems" :popup="true" />
                 <Button type="button" label="Options" icon="pi pi-angle-down" @click="toggleMenu($event, index, item)" style="width: auto" size="small" severity="secondary" />
             </div>
         </template>
-        <hr width="100%" />
         <template #content>
             <div class="flex flex-col gap-2">
-                <div class="flex flex-col gap-5 border-b-2 pb-4">
+                <div class="flex flex-col gap-5 border-b-2 dark:border-gray-600 pb-4">
                     <div class="flex justify-between">
                         <div class="">
                             <p class="text-[10px] uppercase text-gray-400">Miqdor</p>
@@ -25,17 +24,17 @@
                     <div class="flex justify-between">
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Sotib olish narxi</p>
-                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">1-kg sotilish narxi</p>
-                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
+                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <Button @click="addProductByIdModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
-                    <Button type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
+                    <Button type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                    <Button @click="addProductByIdModalOpen(item)" type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                 </div>
             </div>
         </template>
@@ -54,7 +53,7 @@
     <!--End Delete Modal -->
     <!-- Begin Edit -->
     <Drawer v-model:visible="visibleEditProduct" header="Mahsulot Taxrirlash" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
-        <div class="grid grid-cols-1 gap-2">
+        <div class="grid grid-cols-1 gap-4">
             <span class="grid grid-cols-1 gap-2">
                 <label for="Name">Mahsulot nomi</label>
                 <InputText type="text" id="Name" v-model="editproduct.name" />
@@ -71,25 +70,25 @@
                 <label for="buyyingPrice">Sotish narxi</label>
                 <InputNumber type="number" id="buyyingPrice" v-model="editproduct.buyyingPrice" />
             </span>
-            <Button @click="editProductById()" :label="isLoading ? 'Yuklanmoqda...' : 'Taxrirlash'"></Button>
+            <Button @click="editProductById()" size="large" :label="isLoading ? 'Yuklanmoqda...' : 'Taxrirlash'"></Button>
         </div>
     </Drawer>
     <!-- End Edit -->
     <!-- Begin Edit -->
-    <Drawer v-model:visible="visibleAddProductById " :header="product.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-100 lg:!w-[100%]">
-        <AddProductById :product="product" @closeAddModal='closeAddModal'></AddProductById>
+    <Drawer v-model:visible="visibleAddProductById" :header="product.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+        <AddProductById :product="product" @refreshGetProductFunction="refreshGetProductFunction"></AddProductById>
     </Drawer>
     <!-- End Edit -->
 </template>
 
 <script setup>
+import formatNumber from '@/utils/NumberFormatter.js';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import formatCurrency from '../../utils/PriceFormatter.js';
-import formatNumber from '@/utils/NumberFormatter.js';
-import AddProductById from './BarnProduct/AddProductById.vue'
+import AddProductById from './BarnProduct/AddProductById.vue';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
@@ -100,7 +99,7 @@ const product = ref({});
 const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
-const visibleAddProductById  = ref(false);
+const visibleAddProductById = ref(false);
 const isLoading = ref(false);
 const editproduct = ref({
     id: null,
@@ -198,13 +197,14 @@ const editProductById = async () => {
     }
 };
 
-const addProductByIdModalOpen=(item)=>{
-    visibleAddProductById .value = true;
+const addProductByIdModalOpen = (item) => {
+    visibleAddProductById.value = true;
     console.log(item._id);
-    product.value=item
-}
+    product.value = item;
+};
 
-const closeAddModal=()=>{
-    visibleAddProductById .value = false;
-}
+const refreshGetProductFunction = () => {
+    emits('getProduct');
+    visibleAddProductById.value = false;
+};
 </script>

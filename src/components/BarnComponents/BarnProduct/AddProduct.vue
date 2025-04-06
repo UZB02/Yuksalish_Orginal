@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-1 gap-2">
+    <div class="grid grid-cols-1 gap-4">
         <span class="grid  gap-2">
             <label for="Name">Mahsulot nomi</label>
             <InputText type="text" id="Name" v-model="product.name" />
@@ -9,24 +9,14 @@
             <InputNumber type="number" id="size" v-model="product.size" />
         </span>
         <span class="grid  gap-2">
-            <label for="price">Sotib olish narxi</label>
-            <InputNumber type="number" id="price" v-model="product.price" />
+            <label for="price">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="price" v-model="product.buyyingPrice" />
         </span>
         <span class="grid  gap-2">
-            <label for="buyyingPrice">Sotish narxi</label>
-            <InputNumber type="number" id="buyyingPrice" v-model="product.buyyingPrice" />
+            <label for="buyyingPrice">Sotish narxi (UZS)</label>
+            <InputNumber type="number" id="buyyingPrice" v-model="product.price" />
         </span>
-        <span class="grid grid-cols-2 gap-2">
-            <span class="grid">
-               <label>Tannarxi</label>
-            <h6>{{ formatCurrency(product.size * product.price )}}</h6>
-            </span>
-            <span class="grid items-center justify-center">
-               <label>Foyda</label>
-            <h6>{{ formatCurrency(product.size * product.buyyingPrice - product.size * product.price) }}</h6>
-            </span>
-        </span>
-        <Button @click="addProduct()" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
+        <Button @click="addProduct()" size="large" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
     </div>
 </template>
 <script setup>
