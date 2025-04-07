@@ -60,7 +60,6 @@ const addProduct = async () => {
             isloading.value = false;
             showSuccess();
             emits('getProduct');
-            //   router.push("/ombor");
         }
     } catch (error) {
         isloading.value = false;

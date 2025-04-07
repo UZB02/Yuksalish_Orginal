@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <Button type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                    <Button @click="SellProductModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                     <Button @click="addProductByIdModalOpen(item)" type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                 </div>
             </div>
@@ -74,11 +74,16 @@
         </div>
     </Drawer>
     <!-- End Edit -->
-    <!-- Begin Edit -->
+    <!-- Begin AddProductById Modal -->
     <Drawer v-model:visible="visibleAddProductById" :header="product.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <AddProductById :product="product" @refreshGetProductFunction="refreshGetProductFunction"></AddProductById>
     </Drawer>
-    <!-- End Edit -->
+    <!-- End AddProductById Modal -->
+    <!-- Begin SellProduct Modal -->
+    <Drawer v-model:visible="visibleSellProduct" :header="product.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+        <SellProduct :product="product" @refreshGetProductFunction="refreshGetProductFunction"></SellProduct>
+    </Drawer>
+    <!-- End SellProduct Modal -->
 </template>
 
 <script setup>
@@ -89,6 +94,7 @@ import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import formatCurrency from '../../utils/PriceFormatter.js';
 import AddProductById from './BarnProduct/AddProductById.vue';
+import SellProduct from './BarnProduct/SellProduct.vue';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
@@ -100,6 +106,7 @@ const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
 const visibleAddProductById = ref(false);
+const visibleSellProduct = ref(false);
 const isLoading = ref(false);
 const editproduct = ref({
     id: null,
@@ -199,12 +206,16 @@ const editProductById = async () => {
 
 const addProductByIdModalOpen = (item) => {
     visibleAddProductById.value = true;
-    console.log(item._id);
+    product.value = item;
+};
+const SellProductModalOpen = (item) => {
+    visibleSellProduct.value = true;
     product.value = item;
 };
 
 const refreshGetProductFunction = () => {
     emits('getProduct');
     visibleAddProductById.value = false;
+    visibleSellProduct.value = false;
 };
 </script>
