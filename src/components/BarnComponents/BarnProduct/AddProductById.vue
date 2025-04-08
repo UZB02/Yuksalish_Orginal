@@ -60,8 +60,6 @@ const addProductById = async () => {
         console.log(error);
     }
 };
-
-// console.log(product.value);
 </script>
 <style scoped>
 h6 {

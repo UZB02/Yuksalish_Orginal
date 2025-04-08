@@ -26,7 +26,7 @@ import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
 import BarnCard from '../../components/BarnComponents/BarnCard.vue';
 import CardSkeleton from '../../components/BarnComponents/BarnCardSkeleton.vue';
-import AddProductForm from '../../components/BarnComponents/BarnProduct/AddProduct.vue'
+import AddProductForm from '../../components/BarnComponents/BarnProduct/AddProduct.vue';
 
 const data = ref([]);
 const searchQuery = ref(''); // Qidiruv maydoni uchun

@@ -56,7 +56,6 @@ const props = defineProps({
 
 const product = props.product;
 const isloading = ref(false);
-console.log(product);
 
 const sellProduct = ref({
     customer: '',

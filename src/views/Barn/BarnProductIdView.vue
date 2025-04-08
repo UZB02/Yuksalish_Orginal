@@ -45,14 +45,12 @@ import ProductIdTable from '../../components/BarnComponents/BarnProductIdTable.v
 import formatDateTime from '../../utils/DateTimeFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
 const id = useRoute().params.id;
-console.log(id);
 const data = ref([]);
 
 const getProduct = async () => {
     try {
         const response = await axios.get(`/api/product/${id}`);
         data.value = response.data;
-        console.log(data.value);
     } catch (error) {
         console.error(error);
     }

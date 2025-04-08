@@ -127,7 +127,6 @@ const toggleMenu = (event, index, item) => {
         buyyingPrice: item.buyyingPrice,
         size: item.size
     };
-    console.log(product.value);
     if (menu.value[index]) {
         menu.value[index].toggle(event);
     } else {

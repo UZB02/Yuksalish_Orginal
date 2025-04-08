@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import Logo from '../../public/Logo.vue';
 import AppConfigurator from './AppConfigurator.vue';
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
-const showDatePicker = ref(false);
 const date = ref(null); // Tanlangan sana
 </script>
 

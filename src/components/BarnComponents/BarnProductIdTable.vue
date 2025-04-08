@@ -157,7 +157,6 @@ const getProductHistory = async () => {
 const deletProductHistoryModal = (item) => {
     deletModal.value = true;
     delProduct.value = item;
-    console.log(delProduct.value._id);
 };
 const deleteProductHistory = async () => {
     isloading.value = true;
