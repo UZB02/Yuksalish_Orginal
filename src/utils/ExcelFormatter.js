@@ -23,7 +23,7 @@ const exportToExcel = (history, name) => {
     // Create the Excel sheet with the filtered data
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Product History');
+    XLSX.utils.book_append_sheet(workbook, worksheet, fileName);
 
     // Write the Excel file to the browser
     XLSX.writeFile(workbook, fileName);

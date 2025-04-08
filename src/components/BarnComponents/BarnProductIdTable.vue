@@ -50,7 +50,7 @@
             </Column>
         </DataTable>
         <!--End Skeleton loading table -->
-        <DataTable v-else ref="tableRef" :value="productHistory?.history" scrollable tableStyle="min-width: 1800px">
+        <DataTable v-else ref="tableRef" :value="productHistory?.history ? productHistory?.history : []" scrollable tableStyle="min-width: 1800px">
             <Column field="name" header="Haridor"></Column>
             <Column field="phone" header="Tell"></Column>
             <Column field="size" header="Sotilgan Mahsulot">
@@ -93,8 +93,15 @@
             </Column>
             <template #header>
                 <div class="flex items-center justify-between">
-                    <div class="text-end pb-4">
-                        <Button icon="pi pi-download" label="Yuklash" @click="exportToExcel(productHistory.history, props.data.name)" />
+                    <div class="text-end flex gap-2 pb-4">
+                        <Button @click="SellProductModalOpen(product.data)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                            <i class="pi pi-cart-minus"></i>
+                            <span class="hidden sm:inline">Sotish</span>
+                        </Button>
+                        <Button severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                            <i class="pi pi-download"></i>
+                            <span class="hidden sm:inline">Yuklash</span>
+                        </Button>
                     </div>
                     <div class="text-end pb-4">
                         <DatePicker v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" @input="getProductHistory()" />
@@ -118,7 +125,7 @@
     <!-- Paginator -->
     <Paginator :rows="limit" :totalRecords="totalItems" :rowsPerPageOptions="[5, 10, 20, 30]" @page="onPageChange" />
 
-    <!-- Modal View -->
+    <!--Begin Modal View -->
     <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }" :modal="true">
         <h3 class="text-lg font-semibold">{{ viewProduct?.name }}</h3>
         <p class="mt-4">{{ viewProduct?.description || 'Tafsilotlar mavjud emas!' }}</p>
@@ -126,6 +133,13 @@
             <Button severity="danger" label="Yopish" @click="viewVisible = false" />
         </template>
     </Dialog>
+    <!-- End Modal View -->
+
+    <!-- Begin SellProduct Modal -->
+    <Drawer v-model:visible="visibleSellProduct" :header="product.data.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+        <SellProduct :product="product.data" @refreshGetProductFunction="refreshGetProductFunction"></SellProduct>
+    </Drawer>
+    <!-- End SellProduct Modal -->
     <!-- Toast -->
     <Toast />
 </template>
@@ -138,8 +152,9 @@ import { useRoute } from 'vue-router';
 import formatDateTime from '../../utils/DateTimeFormatter';
 import exportToExcel from '../../utils/ExcelFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
+import SellProduct from './BarnProduct/SellProduct.vue';
 
-const props = defineProps({
+const product = defineProps({
     data: {
         type: Object,
         required: true
@@ -159,6 +174,7 @@ const delProduct = ref({});
 const toast = useToast();
 const tableRef = ref(null);
 const date = ref();
+const visibleSellProduct = ref(false);
 
 const getProductHistory = async () => {
     try {
@@ -202,6 +218,15 @@ const viewDescription = (item) => {
 const onPageChange = (event) => {
     page.value = event.page + 1;
     limit.value = event.rows;
+    getProductHistory();
+};
+
+const SellProductModalOpen = (item) => {
+    visibleSellProduct.value = true;
+    product.value = item;
+};
+const refreshGetProductFunction = () => {
+    visibleSellProduct.value = false;
     getProductHistory();
 };
 
