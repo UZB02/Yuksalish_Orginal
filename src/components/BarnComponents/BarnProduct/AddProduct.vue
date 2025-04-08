@@ -23,7 +23,6 @@
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, ref, onMounted } from 'vue';
-import formatCurrency from '@/utils/PriceFormatter';
 
 const isloading = ref(false);
 const toast = useToast();

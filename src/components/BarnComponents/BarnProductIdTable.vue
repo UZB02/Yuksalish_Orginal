@@ -50,7 +50,7 @@
             </Column>
         </DataTable>
         <!--End Skeleton loading table -->
-        <DataTable v-else :value="productHistory?.history" scrollable tableStyle="min-width: 1800px">
+        <DataTable v-else ref="tableRef" :value="productHistory?.history" scrollable tableStyle="min-width: 1800px">
             <Column field="name" header="Haridor"></Column>
             <Column field="phone" header="Tell"></Column>
             <Column field="size" header="Sotilgan Mahsulot">
@@ -91,6 +91,16 @@
                     </button>
                 </template>
             </Column>
+            <template #header>
+                <div class="flex items-center justify-between">
+                    <div class="text-end pb-4">
+                        <Button icon="pi pi-download" label="Yuklash" @click="exportToExcel(productHistory.history, props.data.name)" />
+                    </div>
+                    <div class="text-end pb-4">
+                        <DatePicker v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" @input="getProductHistory()" />
+                    </div>
+                </div>
+            </template>
         </DataTable>
     </div>
     <!--Begin Delete Modal -->
@@ -123,11 +133,18 @@
 <script setup>
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import formatDateTime from '../../utils/DateTimeFormatter';
+import exportToExcel from '../../utils/ExcelFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
 
+const props = defineProps({
+    data: {
+        type: Object,
+        required: true
+    }
+});
 const id = useRoute().params.id;
 const productHistory = ref(null);
 const page = ref(1);
@@ -140,14 +157,18 @@ const isloading = ref(false);
 const loadingProduct = ref(true);
 const delProduct = ref({});
 const toast = useToast();
+const tableRef = ref(null);
+const date = ref();
 
 const getProductHistory = async () => {
     try {
-        const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}`);
+        const dateParam = date.value ? `&date=${date.value}` : '';
+        const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
         if ((response.status = 200)) {
             loadingProduct.value = false;
             productHistory.value = response.data;
             totalItems.value = response.data.total;
+            // console.log(productHistory.value);
         }
     } catch (error) {
         console.error(error);

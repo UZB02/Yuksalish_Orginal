@@ -35,7 +35,7 @@
             </h6>
         </div>
     </div>
-    <ProductIdTable />
+    <ProductIdTable :data="data"/>
 </template>
 <script setup>
 import axios from 'axios';
