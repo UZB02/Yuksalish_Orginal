@@ -2,22 +2,22 @@
     <section class="grid grid-cols-1 gap-12">
         <div class="flex justify-between">
             <span class="grid grid-cols-1 md:grid-cols-2 gap-1">
-                <label for="">Hajmi:</label>
+                <label>Hajmi:</label>
                 <h6>{{ product.size }} Kg</h6>
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2">
-                <label for="">Tannarxi:</label>
+                <label>Tannarxi:</label>
                 <h6>{{ formatCurrency(product.price) }}</h6>
             </span>
         </div>
         <div class="grid grid-cols-1 gap-4">
-          <span class="grid  gap-2">
-            <label for="price">Qo'shiladigan Kg</label>
-            <InputNumber type="number" id="price" v-model="productSize" />
+          <span class="grid gap-2">
+            <label for="size">Qo'shiladigan Kg</label>
+            <InputNumber type="number" id="size" v-model="productSize" />
         </span>
           <span class="grid  gap-2">
-            <label for="price">Sotib olish narxi (UZS)</label>
-            <InputNumber type="number" id="price" v-model="productBuyyingPrice" />
+            <label for="buyyingprice">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="buyyingprice" v-model="productBuyyingPrice" />
         </span>
           <span class="grid  gap-2">
             <label for="price">Sotish narxi (UZS)</label>

@@ -1,38 +1,38 @@
 <template>
-    <div class="w-full grid grid-cols-2 md:flex md:justify-between gap-5 flex-wrap mb-6 md:mt-2">
+    <div class="w-full grid grid-cols-2 shadow p-4 md:flex md:justify-between gap-5 flex-wrap mb-6 md:mt-2">
         <div>
             <p class="text-xs uppercase text-gray-400">Mahsulot nomi</p>
-            <p class="text-sm font-medium">
+            <h6>
                 {{ data.name ? data.name : 'Loading...' }}
-            </p>
+            </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">Miqdor</p>
-            <p class="text-sm font-medium">{{ data.size ? data.size : 'Loading...' }} kg</p>
+            <h6>{{ data.size ? data.size : 'Loading...' }} kg</h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg narx</p>
-            <p class="text-sm font-medium">
+            <h6>
                 {{ data.price ? formatCurrency(Number(data?.price)) : 'Loading...' }}
-            </p>
+            </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg Sotish narxi</p>
-            <p class="text-sm font-medium">
+            <h6>
                 {{ data.buyyingPrice ? formatCurrency(Number(data?.buyyingPrice)) : 'Loading...' }}
-            </p>
+            </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">Jami Summa</p>
-            <p class="text-sm font-medium">
+            <h6>
                 {{ data.size ? formatCurrency(Number(data?.size) * Number(data?.price)) : 'Loading...' }}
-            </p>
+            </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">qo'shilgan vaqt</p>
-            <p class="text-sm font-medium">
+            <h6>
                 {{ data.created_at ? formatDateTime(data.created_at) : 'Loading...' }}
-            </p>
+            </h6>
         </div>
     </div>
     <ProductIdTable />
@@ -60,3 +60,9 @@ onMounted(() => {
     getProduct();
 });
 </script>
+<style scoped>
+h6{
+    padding: 0;
+    margin: 0;
+}
+</style>

@@ -71,7 +71,7 @@
                     {{ formatCurrency(slotProps.data.totalAmount) }}
                 </template>
             </Column>
-            <Column field="profit" header="Tushkan Foyda">
+            <Column field="profit" header="Foyda">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.profit) }}
                 </template>
