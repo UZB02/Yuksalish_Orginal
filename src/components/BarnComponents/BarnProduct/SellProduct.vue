@@ -31,8 +31,25 @@
             </span>
             <span class="grid gap-2">
                 <label for="description">Tafsilot</label>
-                <Textarea id="description" v-model="sellProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
+                <Textarea id="productDescription" v-model="sellProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
             </span>
+            <div class="flex items-center">
+                <ToggleButton v-model="checkedNote" class="w-24" onLabel="Eslatma" offLabel="Eslatma" />
+            </div>
+            <div v-if="checkedNote" class="flex flex-col gap-4">
+                <span class="grid gap-2">
+                    <label for="datepicker-24h" class="font-bold block">Eslatma vaqti</label>
+                    <DatePicker id="datepicker-24h" v-model="sellProductNote.timeNote" showTime hourFormat="24" fluid />
+                </span>
+                <span class="grid gap-2">
+                    <label for="buyyerNote">Haridor uchun</label>
+                    <Textarea id="buyyerNote" v-model="sellProductNote.buyyerNote" variant="filled" rows="5" cols="30" placeholder="Haridor uschun eslatma kiriting" />
+                </span>
+                <span class="grid gap-2">
+                    <label for="adminNote">Sotuvchi uchun</label>
+                    <Textarea id="adminNote" v-model="sellProductNote.adminNote" variant="filled" rows="5" cols="30" placeholder="Sotuvchi uschun eslatma kiriting" />
+                </span>
+            </div>
             <Button @click="sellProductfunction" size="large" :label="isloading ? 'Loading...' : 'Sotish'" />
         </div>
     </section>
@@ -56,6 +73,7 @@ const props = defineProps({
 
 const product = props.product;
 const isloading = ref(false);
+const checkedNote = ref(false);
 
 const sellProduct = ref({
     customer: '',
@@ -68,8 +86,15 @@ const sellProduct = ref({
     description: ''
 });
 
+const sellProductNote = ref({
+    buyyerNote: sellProduct.value.size + ' ' + 'Kg' + ' ' + product.name + ' ' + 'uchun' + ' ' + sellProduct.value.price * sellProduct.value.size + ' ' + "So'm" + ' ' + "to'lov",
+    adminNote: '',
+    timeNote: ''
+});
+
 const sellProductfunction = async () => {
-    if (sellProduct.value.customer == '' || sellProduct.value.price == '') {
+    console.log(sellProductNote.value);
+    if (sellProduct.value.customer == '' || sellProduct.value.price == '' || sellProduct.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;
     }
@@ -93,6 +118,7 @@ const sellProductfunction = async () => {
         }
     } catch (error) {
         console.error('Xatolik:', error);
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: 'Mahsulot sotishda xato yuz berdi.', life: 3000 });
     } finally {
         isloading.value = false;
     }
