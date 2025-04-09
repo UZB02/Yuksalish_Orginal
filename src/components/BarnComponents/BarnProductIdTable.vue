@@ -52,13 +52,13 @@
         <!--End Skeleton loading table -->
         <DataTable v-else ref="tableRef" :value="productHistory?.history ? productHistory?.history : []" scrollable tableStyle="min-width: 1800px">
             <Column field="name" header="Haridor"></Column>
-           <Column field="phone" header="Tell">
-    <template #body="slotProps">
-        <a :href="'tel:' + slotProps.data.phone" class="text-blue-800 hover:underline">
-            {{ slotProps.data.phone }}
-        </a>
-    </template>
-</Column>
+            <Column field="phone" header="Tell">
+                <template #body="slotProps">
+                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.phone" class="text-blue-800 hover:underline dark:text-white">
+                        {{ slotProps.data.phone }}
+                    </a>
+                </template>
+            </Column>
             <Column field="size" header="Sotilgan Mahsulot">
                 <template #body="slotProps"> {{ slotProps.data.size }} Kg </template>
             </Column>
@@ -90,10 +90,10 @@
             <Column header="Amallar">
                 <template #body="slotProps">
                     <div class="flex gap-3">
-                        <button @click="deletProductHistoryModal(slotProps.data)">
+                        <button v-tooltip.top="'O\'chirish'" @click="deletProductHistoryModal(slotProps.data)">
                             <i class="pi pi-trash text-red-500 mr-2"></i>
                         </button>
-                        <button @click="viewDescription(slotProps.data)">
+                        <button v-tooltip.top="'Tafsilot'" @click="viewDescription(slotProps.data)">
                             <i class="pi pi-eye"></i>
                         </button>
                     </div>
@@ -106,13 +106,13 @@
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
-                        <Button severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>
                         </Button>
                     </div>
                     <div class="text-end pb-4">
-                        <DatePicker v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" @input="getProductHistory()" />
+                        <DatePicker v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" @input="getProductHistory()" />
                     </div>
                 </div>
             </template>
@@ -155,14 +155,14 @@
 <script setup>
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { defineProps, defineEmits, onMounted, ref } from 'vue';
+import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import formatDateTime from '../../utils/DateTimeFormatter';
 import exportToExcel from '../../utils/ExcelFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
 import SellProduct from './BarnProduct/SellProduct.vue';
 
-const emits=defineEmits(['getProduct'])
+const emits = defineEmits(['getProduct']);
 
 const product = defineProps({
     data: {
@@ -236,7 +236,7 @@ const SellProductModalOpen = () => {
 };
 const refreshGetProductFunction = () => {
     visibleSellProduct.value = false;
-     emits('getProduct')
+    emits('getProduct');
     getProductHistory();
 };
 
