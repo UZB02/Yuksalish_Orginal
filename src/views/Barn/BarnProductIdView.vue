@@ -13,13 +13,13 @@
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg narx</p>
             <h6>
-                {{ data.price ? formatCurrency(Number(data?.price)) : 'Loading...' }}
+                {{ data.buyyingPrice ? formatCurrency(Number(data?.buyyingPrice)) : 'Loading...' }}
             </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg Sotish narxi</p>
             <h6>
-                {{ data.buyyingPrice ? formatCurrency(Number(data?.buyyingPrice)) : 'Loading...' }}
+                {{ data.price ? formatCurrency(Number(data?.price)) : 'Loading...' }}
             </h6>
         </div>
         <div>
@@ -35,7 +35,7 @@
             </h6>
         </div>
     </div>
-    <ProductIdTable :data="data"/>
+    <ProductIdTable :data="data" @getProduct="getProduct"/>
 </template>
 <script setup>
 import axios from 'axios';

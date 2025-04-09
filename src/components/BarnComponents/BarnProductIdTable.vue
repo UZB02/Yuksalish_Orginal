@@ -52,7 +52,13 @@
         <!--End Skeleton loading table -->
         <DataTable v-else ref="tableRef" :value="productHistory?.history ? productHistory?.history : []" scrollable tableStyle="min-width: 1800px">
             <Column field="name" header="Haridor"></Column>
-            <Column field="phone" header="Tell"></Column>
+           <Column field="phone" header="Tell">
+    <template #body="slotProps">
+        <a :href="'tel:' + slotProps.data.phone" class="text-blue-800 hover:underline">
+            {{ slotProps.data.phone }}
+        </a>
+    </template>
+</Column>
             <Column field="size" header="Sotilgan Mahsulot">
                 <template #body="slotProps"> {{ slotProps.data.size }} Kg </template>
             </Column>
@@ -83,12 +89,14 @@
             </Column>
             <Column header="Amallar">
                 <template #body="slotProps">
-                    <button @click="deletProductHistoryModal(slotProps.data)">
-                        <i class="pi pi-trash text-red-500 mr-2"></i>
-                    </button>
-                    <button @click="viewDescription(slotProps.data)">
-                        <i class="pi pi-eye"></i>
-                    </button>
+                    <div class="flex gap-3">
+                        <button @click="deletProductHistoryModal(slotProps.data)">
+                            <i class="pi pi-trash text-red-500 mr-2"></i>
+                        </button>
+                        <button @click="viewDescription(slotProps.data)">
+                            <i class="pi pi-eye"></i>
+                        </button>
+                    </div>
                 </template>
             </Column>
             <template #header>
@@ -147,12 +155,14 @@
 <script setup>
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { defineProps, onMounted, ref } from 'vue';
+import { defineProps, defineEmits, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import formatDateTime from '../../utils/DateTimeFormatter';
 import exportToExcel from '../../utils/ExcelFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
 import SellProduct from './BarnProduct/SellProduct.vue';
+
+const emits=defineEmits(['getProduct'])
 
 const product = defineProps({
     data: {
@@ -221,12 +231,12 @@ const onPageChange = (event) => {
     getProductHistory();
 };
 
-const SellProductModalOpen = (item) => {
+const SellProductModalOpen = () => {
     visibleSellProduct.value = true;
-    product.value = item;
 };
 const refreshGetProductFunction = () => {
     visibleSellProduct.value = false;
+     emits('getProduct')
     getProductHistory();
 };
 
