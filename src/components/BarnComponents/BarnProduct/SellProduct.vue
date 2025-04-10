@@ -63,7 +63,7 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import { useToast } from 'primevue/usetoast';
-import { defineEmits, defineProps, ref } from 'vue';
+import { defineEmits, defineProps, ref, watch } from 'vue';
 const toast = useToast();
 
 const emits = defineEmits(['refreshGetProductFunction']);
@@ -87,13 +87,12 @@ const sellProduct = ref({
 });
 
 const sellProductNote = ref({
-    buyyerNote: sellProduct.value.size + ' ' + 'Kg' + ' ' + product.name + ' ' + 'uchun' + ' ' + sellProduct.value.price * sellProduct.value.size + ' ' + "So'm" + ' ' + "to'lov",
+    buyyerNote: '',
     adminNote: '',
     timeNote: ''
 });
 
 const sellProductfunction = async () => {
-    console.log(sellProductNote.value);
     if (sellProduct.value.customer == '' || sellProduct.value.price == '' || sellProduct.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;
@@ -123,6 +122,11 @@ const sellProductfunction = async () => {
         isloading.value = false;
     }
 };
+
+watch(sellProduct, (newValue) => {
+    sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov qilish vaqtingiz keldi!`;
+    sellProductNote.value.adminNote = `${newValue.customer} dan ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov olish vaqti keldi`;
+}, { deep: true });
 </script>
 
 <style scoped>

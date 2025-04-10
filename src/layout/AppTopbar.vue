@@ -1,10 +1,16 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
+import { useAuthStore } from '@/stores/useAuthStore.js';
 import { ref } from 'vue';
 import Logo from '../../public/Logo.vue';
 import AppConfigurator from './AppConfigurator.vue';
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 const date = ref(null); // Tanlangan sana
+
+const authStore = useAuthStore();
+const logout = () => {
+    authStore.logout();
+};
 </script>
 
 <template>
@@ -47,7 +53,7 @@ const date = ref(null); // Tanlangan sana
                 <div class="layout-topbar-menu-content">
                     <DatePicker v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" />
 
-                    <button type="button" class="layout-topbar-action">
+                    <button @click="logout" type="button" class="layout-topbar-action">
                         <i class="pi pi-sign-out" style="font-size: 15px"></i>
                         <span>Tizimdan chiqish</span>
                     </button>

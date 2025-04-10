@@ -12,6 +12,7 @@
         "axios": "^1.8.4",
         "chart.js": "3.3.2",
         "file-saver": "^2.0.5",
+        "pinia": "^3.0.2",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.1",
         "tailwindcss-primeui": "^0.5.0",
@@ -32,6 +33,6 @@
         "sass": "^1.55.0",
         "tailwindcss": "^3.4.6",
         "unplugin-vue-components": "^0.27.3",
-        "vite": "^5.3.1"
+        "vite": "^6.2.5"
     }
 }

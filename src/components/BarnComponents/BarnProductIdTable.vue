@@ -155,7 +155,7 @@
 <script setup>
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { defineEmits, defineProps, onMounted, ref } from 'vue';
+import { defineEmits, defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import formatDateTime from '../../utils/DateTimeFormatter';
 import exportToExcel from '../../utils/ExcelFormatter';
@@ -194,6 +194,7 @@ const getProductHistory = async () => {
             loadingProduct.value = false;
             productHistory.value = response.data;
             totalItems.value = response.data.total;
+            // console.log(dateParam);
             // console.log(productHistory.value);
         }
     } catch (error) {
@@ -240,5 +241,8 @@ const refreshGetProductFunction = () => {
     getProductHistory();
 };
 
+watch(date, (newValue, oldValue) => {
+    getProductHistory();
+});
 onMounted(getProductHistory);
 </script>

@@ -1,11 +1,14 @@
 <script setup>
-import axios from "axios";
+import axios from 'axios';
+import AuthProvider from './Provider/AuthProvider.vue';
 
-axios.defaults.baseURL = "https://yuksalish-node.onrender.com";
+axios.defaults.baseURL = 'https://yuksalish-node.onrender.com';
 </script>
 
 <template>
-    <router-view />
+    <AuthProvider>
+        <router-view />
+    </AuthProvider>
 </template>
 
 <style scoped></style>
