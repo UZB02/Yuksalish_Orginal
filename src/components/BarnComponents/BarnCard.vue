@@ -43,7 +43,7 @@
     <Dialog header="O'chirish" v-model:visible="deletModal" :style="{ width: '350px' }" :modal="true">
         <div class="flex items-center justify-center">
             <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem" />
-            <span>O'chirishga ishonchingiz komilmi?</span>
+            <span>{{ product.name }} ni o'chirishga ishonchingiz komilmi?</span>
         </div>
         <template #footer>
             <Button label="Yo'q" icon="pi pi-times" @click="closeDeletModal" text severity="secondary" />
