@@ -3,17 +3,17 @@ import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null,
+        // user: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null,
         token: sessionStorage.getItem('authToken') || null
     }),
 
     actions: {
         initialize() {
-            const savedUser = sessionStorage.getItem('user');
+            // const savedUser = sessionStorage.getItem('user');
             const savedToken = sessionStorage.getItem('authToken');
 
             if (savedUser && savedToken) {
-                this.user = JSON.parse(savedUser);
+                // this.user = JSON.parse(savedUser);
                 this.token = savedToken;
             }
         },
@@ -54,7 +54,6 @@ export const useAuthStore = defineStore('auth', {
                         Authorization: `Bearer ${this.token}`
                     }
                 });
-
                 this.user = response.data.body;
 
                 sessionStorage.setItem('user', JSON.stringify(response.data.body));

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import AuthProvider from './Provider/AuthProvider.vue';
 
-axios.defaults.baseURL = 'https://yuksalish-node.onrender.com';
+axios.defaults.baseURL = 'https://yuksalish-node-lwj4.onrender.com';
 </script>
 
 <template>

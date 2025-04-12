@@ -6,13 +6,13 @@ import { useAuthStore } from '../stores/useAuthStore';
 const authStore = useAuthStore();
 const router = useRouter();
 
-watchEffect(() => {
-    authStore.initialize();
+// watchEffect(() => {
+//     authStore.initialize();
 
-    if (!authStore.user || !authStore.token) {
-        router.replace('/auth/login');
-    }
-});
+//     if (!authStore.user || !authStore.token) {
+//         router.replace('/auth/login');
+//     }
+// });
 
 provide('auth', authStore);
 </script>
