@@ -1,13 +1,13 @@
 <template>
     <section class="grid grid-cols-1 gap-12">
         <div class="flex justify-between">
-            <span class="grid grid-cols-1 md:grid-cols-2 gap-1">
+            <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
                 <label>Hajmi:</label>
                 <h6>{{ product.size }} Kg</h6>
             </span>
-            <span class="grid grid-cols-1 md:grid-cols-2">
+            <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(product.price) }}</h6>
+                <h6>{{ formatCurrency(product.buyyingPrice * product.size)}}</h6>
             </span>
         </div>
         <div class="grid grid-cols-1 gap-4">
@@ -46,7 +46,7 @@ const productBuyyingPrice = ref(product.value.buyyingPrice);
 const addProductById = async () => {
     isloading.value = true;
     try {
-        const res = await axios.put(`/api/product/${product.value._id}`, {
+        const res = await axios.put(`/api/product/size/${product.value._id}`, {
             size: productSize.value,
             price: productPrice.value,
             buyyingPrice: productBuyyingPrice.value

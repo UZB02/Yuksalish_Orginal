@@ -161,7 +161,6 @@ import formatDateTime from '../../utils/DateTimeFormatter';
 import exportToExcel from '../../utils/ExcelFormatter';
 import formatCurrency from '../../utils/PriceFormatter';
 import SellProduct from './BarnProduct/SellProduct.vue';
-
 const emits = defineEmits(['getProduct']);
 
 const product = defineProps({
@@ -188,14 +187,21 @@ const visibleSellProduct = ref(false);
 
 const getProductHistory = async () => {
     try {
-        const dateParam = date.value ? `&date=${date.value}` : '';
+        let dateParam = '';
+        let day = '';
+        let month = '';
+        let year = '';
+        if (date.value instanceof Date) {
+            day = String(date.value.getDate()).padStart(2, '0'); // 01
+            month = String(date.value.getMonth() + 1).padStart(2, '0'); // 04 (0-based, shuning uchun +1)
+            year = date.value.getFullYear(); // 2025
+            dateParam = `&day=${day}&month=${month}&year=${year}`;
+        }
         const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
         if ((response.status = 200)) {
             loadingProduct.value = false;
             productHistory.value = response.data;
             totalItems.value = response.data.total;
-            // console.log(dateParam);
-            // console.log(productHistory.value);
         }
     } catch (error) {
         console.error(error);
@@ -209,7 +215,7 @@ const deletProductHistoryModal = (item) => {
 const deleteProductHistory = async () => {
     isloading.value = true;
     try {
-        const res = await axios.delete(`/api/product-history/delete/${delProduct.value._id}`);
+        const res = await axios.delete(`/api/product-history/${delProduct.value._id}`);
         if ((res.status = 200)) {
             isloading.value = false;
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: delProduct.value.name + ' ' + "tarixi o'chirildi", life: 3000 });

@@ -31,7 +31,7 @@
         <div>
             <p class="text-xs uppercase text-gray-400">qo'shilgan vaqt</p>
             <h6>
-                {{ data.created_at ? formatDateTime(data.created_at) : 'Loading...' }}
+                {{ data.createdAt ? formatDateTime(data.createdAt) : 'Loading...' }}
             </h6>
         </div>
     </div>
@@ -51,6 +51,7 @@ const getProduct = async () => {
     try {
         const response = await axios.get(`/api/product/${id}`);
         data.value = response.data;
+        // console.log(data.value);
     } catch (error) {
         console.error(error);
     }
