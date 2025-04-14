@@ -112,7 +112,7 @@
                         </Button>
                     </div>
                     <div class="text-end pb-4">
-                        <DatePicker v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" @input="getProductHistory()" />
+                         <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getProductHistory()" class="w-full lg:w-44"></DatePicker>
                     </div>
                 </div>
             </template>
@@ -197,6 +197,7 @@ const getProductHistory = async () => {
             year = date.value.getFullYear(); // 2025
             dateParam = `&day=${day}&month=${month}&year=${year}`;
         }
+        console.log(dateParam);
         const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
         if ((response.status = 200)) {
             loadingProduct.value = false;
@@ -205,6 +206,7 @@ const getProductHistory = async () => {
         }
     } catch (error) {
         console.error(error);
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response.data.message, life: 3000 });
     }
 };
 
