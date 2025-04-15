@@ -1,13 +1,13 @@
 <template>
   <div class="h-screen w-full">
     <div class="flex items-center justify-between">
-      <h4 class="text-[#000] font-semibold">Mahsulot Tarkibi</h4>
+      <h4 class=" font-semibold">Mahsulot Tarkibi</h4>
       <span>
         <h6>Hajm: {{totalSize}} Kg</h6>
       </span>
     </div>
 
-    <div class="w-full h-screen mx-auto bg-white p-4 rounded-2xl mt-2 flex flex-col gap-5">
+    <div class="w-full h-screen mx-auto bg-white dark:bg-gray-900/50 p-4 rounded-2xl mt-2 flex flex-col gap-5">
       <form class="grid grid-cols-1 gap-5" @submit.prevent="addProductToComposition">
         <span class="grid gap-2">
           <label for="productName">Yangi mahsulot nomi</label>
