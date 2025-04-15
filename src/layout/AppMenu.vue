@@ -8,6 +8,7 @@ const model = ref([
         label: 'Asosiy',
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Aralashma', icon: 'pi pi-fw pi-database', to: '/mix' },
             { label: 'Ombor', icon: 'pi pi-fw pi-warehouse', to: '/barn' }
         ]
     },

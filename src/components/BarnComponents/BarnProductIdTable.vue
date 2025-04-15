@@ -112,7 +112,7 @@
                         </Button>
                     </div>
                     <div class="text-end pb-4">
-                         <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getProductHistory()" class="w-full lg:w-44"></DatePicker>
+                        <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getProductHistory()" class="w-full lg:w-44"></DatePicker>
                     </div>
                 </div>
             </template>
