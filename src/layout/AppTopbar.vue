@@ -51,7 +51,8 @@ const logout = () => {
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <DatePicker v-model="date" showIcon class="w-full lg:w-44" iconDisplay="input" />
+                    <!-- <DatePicker v-model="date" showIcon   /> -->
+                    <DatePicker v-model="date" view="month" class="w-full lg:w-44" showIcon iconDisplay="input" dateFormat="mm/yy" />
 
                     <button @click="logout" type="button" class="layout-topbar-action">
                         <i class="pi pi-sign-out" style="font-size: 15px"></i>
