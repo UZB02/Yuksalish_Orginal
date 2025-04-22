@@ -1,0 +1,28 @@
+{
+    "title": "Tayorlanadigan Maxsulot Nomi",
+    "description": "",
+    "status": ["maxsulot bor", "maxsulot tugadi", "deleted"],
+    "products": [
+        {
+            "product": {
+                "id": "",
+                "name": "Maxsulot nomi 1",
+                "price": "5000"
+            },
+            "kg": "Manashu mix tayyorlash uchun ishlatiladigan  kg"
+        },
+        {
+            "product": {
+                "id": "",
+                "name": "Maxsulot nomi 2",
+                "price": "4000"
+            },
+            "kg": "Manashu mix tayyorlash uchun ishlatiladigan kg"
+        }
+    ],
+    "price": "12000",
+    "maxsulot_tannarxi": "products ichidagi maxsulotlar tan narxi hisoblansin",
+    "umumiy_kg": "Barcha maxsulotni bir martta tayyorlash uchun ketadigan umumiy kg",
+    "xozirda_bazada_qolgan": "xozirda bazada qolgan maxsulot kg si",
+    "tayyorlash_soni": "bu shu mixni tayyorlanishlarini sanab beradi (number)"
+}

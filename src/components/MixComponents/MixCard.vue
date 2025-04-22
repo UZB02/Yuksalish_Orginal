@@ -2,7 +2,7 @@
     <Card style="border-radius: 6px">
         <template #title>
             <div class="flex justify-between items-center border-b-2 dark:border-gray-600 pb-2">
-                <h5 style="margin: 0">{{ item?.name }}</h5>
+                <h5 style="margin: 0">{{ item?.title }}</h5>
                 <!-- Har bir menu uchun alohida ref beriladi -->
                 <Menu :ref="(el) => (menu[index] = el)" :model="overlayMenuItems" :popup="true" />
                 <Button type="button" label="Options" icon="pi pi-angle-down" @click="toggleMenu($event, index, item)" style="width: auto" size="small" severity="secondary" />
@@ -14,21 +14,25 @@
                     <div class="flex justify-between">
                         <div class="">
                             <p class="text-[10px] uppercase text-gray-400">Miqdor</p>
-                            <p class="font-medium" style="line-height: 0">{{ formatNumber(item?.size) }} kg</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatNumber(item?.totalKg) }} kg</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Jami Summa</p>
-                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(Number(item?.size) * Number(item?.price)) }}</p>
+                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(Number(item?.totalKg) * Number(item?.price)) }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div>
-                            <p class="text-[10px] uppercase text-gray-400">Sotib olish narxi</p>
-                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
+                            <p class="text-[10px] uppercase text-gray-400">Tayyorlash narxi</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.basePrice) }}</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">1-kg sotilish narxi</p>
                             <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
+                        </div>
+                        <div>
+                            <!-- <p class="text-[10px] uppercase text-gray-400">Xolat</p> -->
+                           <Tag severity="success" value="Success" class="mt-4"></Tag>
                         </div>
                     </div>
                 </div>
@@ -76,12 +80,12 @@
     <!-- End Edit -->
     <!-- Begin AddProductById Modal -->
     <Drawer v-model:visible="visibleAddProductById" :header="product.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
-        <AddProductById :product="product" @refreshGetProductFunction="refreshGetProductFunction"></AddProductById>
+        <AddProductById :product="product" @refreshGetMixFunction="refreshGetMixFunction"></AddProductById>
     </Drawer>
     <!-- End AddProductById Modal -->
     <!-- Begin SellProduct Modal -->
     <Drawer v-model:visible="visibleSellProduct" :header="product.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
-        <SellProduct :product="product" @refreshGetProductFunction="refreshGetProductFunction"></SellProduct>
+        <SellProduct :product="product" @refreshGetMixFunction="refreshGetMixFunction"></SellProduct>
     </Drawer>
     <!-- End SellProduct Modal -->
 </template>
@@ -100,7 +104,7 @@ const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
 
 const props = defineProps({ item: {} });
-const emits = defineEmits(['getProduct']);
+const emits = defineEmits(['getMix']);
 const product = ref({});
 const deletModal = ref(false);
 const toast = useToast();
@@ -174,7 +178,7 @@ const deletProductById = async () => {
             isLoading.value = false;
             toast.add({ severity: 'success', summary: "O'chirildi", detail: "Mahsulot o'chirildi", life: 3000 });
             deletModal.value = false;
-            emits('getProduct');
+            emits('getMix');
         }
     } catch (error) {
         console.log(error);
@@ -194,7 +198,7 @@ const editProductById = async () => {
         if (res.status == 200) {
             isLoading.value = false;
             visibleEditProduct.value = false;
-            emits('getProduct');
+            emits('getMix');
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Taxrirlandi', life: 3000 });
         }
     } catch (error) {
@@ -212,8 +216,8 @@ const SellProductModalOpen = (item) => {
     product.value = item;
 };
 
-const refreshGetProductFunction = () => {
-    emits('getProduct');
+const refreshGetMixFunction = () => {
+    emits('getMix');
     visibleAddProductById.value = false;
     visibleSellProduct.value = false;
 };

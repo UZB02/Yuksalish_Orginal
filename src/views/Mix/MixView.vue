@@ -12,19 +12,19 @@
         </Button>
     </div>
 
-    <div class="relative rounded-sm mt-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
-        <BarnCard v-for="item in filteredData" :key="item.id" :item="item" @getProduct="getProduct" />
+    <div class="relative rounded-sm mt-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3">
+        <MixCard v-for="item in filteredData" :key="item.id" :item="item" @getMix="getMix" />
         <CardSkeleton v-if="isloading" />
     </div>
-    <Drawer v-model:visible="visibleAddProduct" header="Mahsulot Qo'shish" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
-        <AddProductForm @getProduct="getProduct"></AddProductForm>
+    <Drawer v-model:visible="visibleAddMix" header="Mahsulot Qo'shish" position="right" class="!w-full md:!w-80 lg:!w-[30rem]">
+        <AddProductForm @getMix="getMix"></AddProductForm>
     </Drawer>
 </template>
 
 <script setup>
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
-import BarnCard from '../../components/MixComponents/MixCard.vue';
+import MixCard from '../../components/MixComponents/MixCard.vue';
 import CardSkeleton from '../../components/BarnComponents/BarnCardSkeleton.vue';
 import AddProductForm from '../../components/BarnComponents/BarnProduct/AddProduct.vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
@@ -34,16 +34,17 @@ const router = useRouter();
 const data = ref([]);
 const searchQuery = ref(''); // Qidiruv maydoni uchun
 const isloading = ref(true);
-const visibleAddProduct = ref(false);
+const visibleAddMix = ref(false);
 
 // API dan ma'lumotlarni olish
-const getProduct = async () => {
+const getMix = async () => {
     try {
-        const res = await axios.get('/api/product');
+        const res = await axios.get('/api/mix');
         data.value = res.data;
+        console.log(res);
         if (res.status == 200) {
             isloading.value = false;
-            visibleAddProduct.value = false;
+            visibleAddMix.value = false;
         }
     } catch (error) {
         console.log(error);
@@ -52,12 +53,12 @@ const getProduct = async () => {
 
 // Qidiruv natijalarini qaytarish
 const filteredData = computed(() => {
-    return data.value.filter(
-        (item) => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()) // Faqat name bo‘yicha qidirish
+    return data?.value.filter(
+        (item) => item.title.toLowerCase().includes(searchQuery.value.toLowerCase()) // Faqat name bo‘yicha qidirish
     );
 });
 
 onMounted(() => {
-    getProduct();
+    getMix();
 });
 </script>
