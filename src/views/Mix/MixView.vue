@@ -12,7 +12,7 @@
         </Button>
     </div>
 
-    <div class="relative rounded-sm mt-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3">
+    <div class="relative rounded-sm mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
         <MixCard v-for="item in filteredData" :key="item.id" :item="item" @getMix="getMix" />
         <CardSkeleton v-if="isloading" />
     </div>
@@ -24,11 +24,10 @@
 <script setup>
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
-import MixCard from '../../components/MixComponents/MixCard.vue';
+import { useRouter } from 'vue-router'; // Routerni import qilish
 import CardSkeleton from '../../components/BarnComponents/BarnCardSkeleton.vue';
 import AddProductForm from '../../components/BarnComponents/BarnProduct/AddProduct.vue';
-import { useRouter } from 'vue-router'; // Routerni import qilish
-
+import MixCard from '../../components/MixComponents/MixCard.vue';
 
 const router = useRouter();
 const data = ref([]);

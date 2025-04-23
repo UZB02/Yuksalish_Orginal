@@ -15,8 +15,8 @@
                 </span>
 
                 <span class="grid gap-2">
-                    <label for="dropdown">Mahsulot tanlang</label>
-                    <Dropdown v-model="product" :options="products" optionLabel="name" placeholder="Mahsulot tanlang" class="w-full" size="large" />
+                    <label for="select">Mahsulot tanlang</label>
+                    <Select v-model="product" :options="products" optionLabel="name" placeholder="Mahsulot tanlang" class="w-full" size="large" />
                 </span>
 
                 <span class="grid gap-2">
@@ -79,7 +79,6 @@ import { useRouter } from 'vue-router';
 
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
-import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import formatCurrency from '../../utils/PriceFormatter';
@@ -140,6 +139,7 @@ const addProductToComposition = () => {
     }
 
     changeAmount.value = null;
+    product.value=null
 };
 
 const deleteProduct = (productItem) => {
