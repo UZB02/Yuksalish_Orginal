@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Logo from '../../../../public/Logo.vue';
 import { useAuthStore } from '../../../stores/useAuthStore';
-import Logo from '../../../../public/Logo.vue'
 const authStore = useAuthStore();
 const router = useRouter();
 const email = ref('');
@@ -14,19 +14,16 @@ const loadinLogin = ref(false);
 
 const login = async () => {
     loadinLogin.value = true;
-
     try {
         const res = await authStore.login(email.value, password.value);
         if (res.status == 200) {
             router.push('/');
-            setTimeout(() => {
-                loadinLogin.value = false;
-                window.location.reload();
-            }, 1000);
+            loadinLogin.value = false;
+            window.location.reload();
         }
         if (res.status == 401 || res.status == 404) {
             loadinLogin.value = false;
-            alert('Admin Topilmadi');
+            alert('Qaytadan urinib ko\'ring');
         }
     } catch (error) {
         loadinLogin.value = false;
@@ -60,7 +57,7 @@ const login = async () => {
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Parolni unutdingizmi?</span>
                         </div>
-                        <Button label="Kirish" class="w-full" as="router-link" to="/" @click="login"></Button>
+                        <Button :label="loadinLogin ? 'Loading...' : 'Kirish'" class="w-full"  @click="login"></Button>
                     </div>
                 </div>
             </div>

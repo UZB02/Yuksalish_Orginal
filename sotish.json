@@ -1,0 +1,12 @@
+{
+    "fullname": "Maxsulot oluvchi odamni ismi full",
+    "phone": "+998991234567",
+    "price": "1 kg sotilish uchun narx. ",
+    "tottalPrice": "{kg}*{price}",
+    "tolanganSumma": " bunda oluvchi maxulotni nasiya savdoga olsa to'lagan summasi chiqariladi",
+    "kg": "Sotib olingan miqdor",
+    "sms": "sms xabarnoma jo'natilgani haqida bildirish noma qoldir.",
+    "description": "Sotuvchi uchun qisqa malumot",
+    "smsDescription": "Buyerda mijozga yuboriladigan sms kiritiladi. sana vaqt ham bo'lishi kere.",
+    "notification": "Bu yer o'zingga qoldi. Sotuvchi vaqt belgilasa usha vaqtda sms yuborish. Haridor va Sotuvchi uchun. "
+}
