@@ -3,11 +3,11 @@
         <div class="flex justify-between">
             <span class="grid grid-cols-1 md:grid-cols-2 gap-1">
                 <label>Mavjut:</label>
-                <h6>{{ product.size }} Kg</h6>
+                <h6>{{ mix.totalKg }} Kg</h6>
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(product.buyyingPrice) }}</h6>
+                <h6>{{ formatCurrency(mix.basePrice) }}</h6>
             </span>
         </div>
 
@@ -68,19 +68,19 @@ const toast = useToast();
 
 const emits = defineEmits(['refreshGetProductFunction']);
 const props = defineProps({
-    product: { type: Object, required: true }
+    mix: { type: Object, required: true }
 });
 
-const product = props.product;
+const mix = props.mix;
 const isloading = ref(false);
 const checkedNote = ref(false);
 
 const sellProduct = ref({
     customer: '',
-    productId: product._id,
+    productId: mix._id,
     size: null,
-    price: product.price,
-    buyyingPrice: product.buyyingPrice,
+    price: mix.price,
+    buyyingPrice: mix.buyyingPrice,
     phone: '',
     currency: 'UZS',
     description: ''

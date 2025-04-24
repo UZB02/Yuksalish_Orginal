@@ -37,7 +37,7 @@
         <template #footer>
             <div class="grid grid-cols-2 gap-2 border-t-2 dark:border-gray-600 pt-2">
                 <Button @click="addProductByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
-                <Button @click="SellProductModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
             </div>
         </template>
     </Card>
@@ -81,11 +81,11 @@
         <AddProductById :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></AddProductById>
     </Drawer>
     <!-- End AddProductById Modal -->
-    <!-- Begin SellProduct Modal -->
-    <Drawer v-model:visible="visibleSellProduct" :header="mix.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
-        <SellProduct :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellProduct>
+    <!-- Begin SellMix Modal -->
+    <Drawer v-model:visible="visibleSellMix" :header="mix.title + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+        <SellMix :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellMix>
     </Drawer>
-    <!-- End SellProduct Modal -->
+    <!-- End SellMix Modal -->
     <!-- Begin Info Modal -->
     <Drawer v-model:visible="visibleInfo" position="top" modal :header="mix.title" style="height: auto" >
         <div>
@@ -124,7 +124,7 @@ import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import AddProductById from './AddMixById.vue';
-import SellProduct from './SellMix.vue';
+import SellMix from './SellMix.vue';
 
 const router = useRouter();
 const menu = ref([]); // Har bir menu uchun massiv sifatida ref saqlaymiz
@@ -136,7 +136,7 @@ const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
 const visibleAddProductById = ref(false);
-const visibleSellProduct = ref(false);
+const visibleSellMix = ref(false);
 const visibleInfo = ref(false);
 const isLoading = ref(false);
 const editproduct = ref({
@@ -151,7 +151,6 @@ const editproduct = ref({
 // Har bir menu komponentini indeks orqali topamiz
 const toggleMenu = (event, index, item) => {
     mix.value = item;
-    console.log(mix.value);
     editproduct.value = {
         id: item._id,
         name: item.name,
@@ -246,9 +245,10 @@ const addProductByIdModalOpen = (item) => {
     visibleAddProductById.value = true;
     product.value = item;
 };
-const SellProductModalOpen = (item) => {
-    visibleSellProduct.value = true;
-    product.value = item;
+const SellMixModalOpen = (item) => {
+    visibleSellMix.value = true;
+    mix.value = item;
+    console.log(item);
 };
 
 const refreshGetMixFunction = () => {
