@@ -18,12 +18,14 @@ const login = async () => {
         const res = await authStore.login(email.value, password.value);
         if (res.status == 200) {
             router.push('/');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
             loadinLogin.value = false;
-            window.location.reload();
         }
         if (res.status == 401 || res.status == 404) {
             loadinLogin.value = false;
-            alert('Qaytadan urinib ko\'ring');
+            alert("Qaytadan urinib ko'ring");
         }
     } catch (error) {
         loadinLogin.value = false;
@@ -57,7 +59,7 @@ const login = async () => {
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Parolni unutdingizmi?</span>
                         </div>
-                        <Button :label="loadinLogin ? 'Loading...' : 'Kirish'" class="w-full"  @click="login"></Button>
+                        <Button :label="loadinLogin ? 'Loading...' : 'Kirish'" class="w-full" @click="login"></Button>
                     </div>
                 </div>
             </div>

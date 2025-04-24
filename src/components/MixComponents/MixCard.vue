@@ -19,9 +19,7 @@
                     </div>
                     <div class="flex items-center justify-end gap-2">
                         <span class="text-gray-400 text-sm">Qolgan KG:</span>
-                        <span class="text-lg font-medium">
-                            {{ item?.totalKg }} Kg
-                        </span>
+                        <span class="text-lg font-medium"> {{ item?.totalKg }} Kg </span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-gray-400 text-sm">Narx:</span>
@@ -31,7 +29,7 @@
                     </div>
                     <div class="flex items-center justify-end gap-2">
                         <span class="text-gray-400 text-sm">Xolat:</span>
-                        <Badge :severity="item?.status == 'finished' ? 'secondary' : ''">{{ item?.status }}</Badge>
+                        <Badge :severity="item?.status == 'finished' ? 'secondary' : 'warn'">{{ item?.status }}</Badge>
                     </div>
                 </div>
             </div>
@@ -88,10 +86,38 @@
         <SellProduct :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellProduct>
     </Drawer>
     <!-- End SellProduct Modal -->
+    <!-- Begin Info Modal -->
+    <Drawer v-model:visible="visibleInfo" position="top" modal :header="mix.title" style="height: auto" >
+        <div>
+            <div>
+                <h6>Tarkibi</h6>
+            </div>
+            <div>
+                <DataTable :value="mix.products" tableStyle="min-width: 40rem">
+                    <Column field="product.name" header="Nomi"></Column>
+                    <Column field="kg" header="Hajmi">
+                        <template #body="{ data }"> {{ data.kg }} Kg </template>
+                    </Column>
+                    <Column  header="Narx">
+                        <template #body="{ data }">
+                            {{ formatCurrency(data.product.buyyingPrice ) }}
+                        </template>
+                    </Column>
+                    <Column  header="Ja'mi summa">
+                        <template #body="{ data }">
+                            {{ formatCurrency(data.product.buyyingPrice * data.kg ) }}
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
+        </div>
+    </Drawer>
+    <!-- End Info Modal -->
 </template>
 
 <script setup>
 import formatCurrency from '@/utils/PriceFormatter';
+import formatDateTime from '@/utils/DateTimeFormatter';
 import axios from 'axios';
 import Badge from 'primevue/badge';
 import { useToast } from 'primevue/usetoast';
@@ -111,6 +137,7 @@ const toast = useToast();
 const visibleEditProduct = ref(false);
 const visibleAddProductById = ref(false);
 const visibleSellProduct = ref(false);
+const visibleInfo = ref(false);
 const isLoading = ref(false);
 const editproduct = ref({
     id: null,
@@ -124,6 +151,7 @@ const editproduct = ref({
 // Har bir menu komponentini indeks orqali topamiz
 const toggleMenu = (event, index, item) => {
     mix.value = item;
+    console.log(mix.value);
     editproduct.value = {
         id: item._id,
         name: item.name,
@@ -145,6 +173,13 @@ function closeDeletModal() {
     deletModal.value = false;
 }
 const overlayMenuItems = ref([
+    {
+        label: "Ma'lumot",
+        icon: 'pi pi-info',
+        command: () => {
+            visibleInfo.value = true;
+        }
+    },
     {
         label: 'Batafsil',
         icon: 'pi pi-eye',
