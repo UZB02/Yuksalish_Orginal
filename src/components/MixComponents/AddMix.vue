@@ -13,17 +13,6 @@
                     <label for="productTitle">Yangi aralashma nomi</label>
                     <InputText id="productTitle" size="large" v-model="productTitle" placeholder="Aralashma nomi" />
                 </span>
-
-                <span class="grid gap-2">
-                    <label for="select">Mahsulot tanlang</label>
-                    <Select v-model="product" :options="products" optionLabel="name" placeholder="Mahsulot tanlang" class="w-full" size="large" />
-                </span>
-
-                <span class="grid gap-2">
-                    <label for="amount">Hajmi (kg)</label>
-                    <InputNumber id="amount" v-model="changeAmount" placeholder="0kg" size="large" class="w-full" />
-                    <div v-if="changedProduct?.size < changeAmount" class="text-red-600 text-xs">Mavjud: {{ changedProduct?.size }} kg</div>
-                </span>
                 <span class="grid gap-2">
                     <label for="price">Tayyorlash narxi</label>
                     <InputNumber id="price" v-model="totalPrice" size="large" class="w-full" />
@@ -36,33 +25,43 @@
                     <label for="description">Tafsilot</label>
                     <Textarea id="description" v-model="newProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
                 </span>
+                <div class="grid grid-cols-1 gap-5 bg-gray-200 p-4 rounded">
+                    <span class="grid gap-2">
+                        <label for="select">Mahsulot tanlang</label>
+                        <Select v-model="product" :options="products" optionLabel="name" placeholder="Mahsulot tanlang" class="w-full" size="large" />
+                    </span>
 
-                <Button @click="addProductToComposition()" size="large" label="Qo'shish"></Button>
+                    <span class="grid gap-2">
+                        <label for="amount">Hajmi (kg)</label>
+                        <InputNumber id="amount" v-model="changeAmount" placeholder="0kg" size="large" class="w-full" />
+                        <div v-if="changedProduct?.size < changeAmount" class="text-red-600 text-xs">Mavjud: {{ changedProduct?.size }} kg</div>
+                    </span>
+                    <Button @click="addProductToComposition()" size="large" label="Qo'shish"></Button>
+                    <!-- Jadval -->
+                    <DataTable :value="newProduct?.composition || []" scrollable tableStyle="min-width: 800px;">
+                        <Column header="ID">
+                            <template #body="{ data }">
+                                {{ newProduct.composition.indexOf(data) + 1 }}
+                            </template>
+                        </Column>
+                        <Column field="name" header="Qo'shilgan mahsulotlar" />
+                        <Column header="Hajmi">
+                            <template #body="{ data }"> {{ data.kg }} Kg </template>
+                        </Column>
+                        <Column header="Narx">
+                            <template #body="{ data }"> {{ formatCurrency(data.buyyingPrice * data.kg) }} </template>
+                        </Column>
+                        <Column header="Amallar">
+                            <template #body="{ data }">
+                                <button v-tooltip.top="'O\'chirish'" @click="deleteProduct(data)">
+                                    <i class="pi pi-trash text-red-500 mr-2"></i>
+                                </button>
+                            </template>
+                        </Column>
+                    </DataTable>
+                    <!-- Tugmalar -->
+                </div>
             </form>
-
-            <!-- Jadval -->
-            <DataTable :value="newProduct?.composition || []" scrollable tableStyle="min-width: 1100px">
-                <Column header="ID">
-                    <template #body="{ data }">
-                        {{ newProduct.composition.indexOf(data) + 1 }}
-                    </template>
-                </Column>
-                <Column field="name" header="Qo'shilgan mahsulotlar" />
-                <Column header="Hajmi">
-                    <template #body="{ data }"> {{ data.kg }} Kg </template>
-                </Column>
-                <Column header="Narx">
-                    <template #body="{ data }"> {{ formatCurrency(data.buyyingPrice * data.kg) }} </template>
-                </Column>
-                <Column header="Amallar">
-                    <template #body="{ data }">
-                        <button v-tooltip.top="'O\'chirish'" @click="deleteProduct(data)">
-                            <i class="pi pi-trash text-red-500 mr-2"></i>
-                        </button>
-                    </template>
-                </Column>
-            </DataTable>
-            <!-- Tugmalar -->
             <div class="mt-10 flex justify-end gap-3">
                 <Button @click="createNewMix()" size="large" :label="isloading ? 'Loading...' : 'Saqlash'"></Button>
                 <Button @click="clearProducts()" size="large" label="Bekor qilish" severity="secondary"></Button>
@@ -139,7 +138,7 @@ const addProductToComposition = () => {
     }
 
     changeAmount.value = null;
-    product.value=null
+    product.value = null;
 };
 
 const deleteProduct = (productItem) => {

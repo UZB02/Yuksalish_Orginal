@@ -11,32 +11,32 @@
         <template #content>
             <div class="flex flex-col gap-2">
                 <div class="grid grid-cols-2 gap-y-4 gap-2">
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-col md:items-center md:flex-row gap-2">
                         <span class="text-gray-400 text-sm">Tayyorlanish:</span>
                         <span class="text-lg font-medium">
-                            {{ item?.quantity }}
+                            {{ formatNumber(item?.stock) }}
                         </span>
                     </div>
-                    <div class="flex items-center justify-end gap-2">
+                    <div class="flex flex-col items-end md:items-center md:flex-row justify-end gap-2">
                         <span class="text-gray-400 text-sm">Qolgan KG:</span>
                         <span class="text-lg font-medium"> {{ item?.totalKg }} Kg </span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-col md:items-center md:flex-row gap-2">
                         <span class="text-gray-400 text-sm">Narx:</span>
                         <span class="text-lg font-medium">
                             {{ formatCurrency(item?.price) }}
                         </span>
                     </div>
-                    <div class="flex items-center justify-end gap-2">
-                        <span class="text-gray-400 text-sm">Xolat:</span>
-                        <Badge :severity="item?.status == 'finished' ? 'secondary' : 'warn'">{{ item?.status }}</Badge>
+                    <div class="flex flex-col items-end md:items-center md:flex-row justify-end gap-2">
+                        <!-- <span class="text-gray-400 text-sm">Ma'lumot:</span> -->
+                        <Button @click="infoModal(item)" icon="pi pi-database" variant="outlined" label="Ma'lumot" size="small" />
                     </div>
                 </div>
             </div>
         </template>
         <template #footer>
             <div class="grid grid-cols-2 gap-2 border-t-2 dark:border-gray-600 pt-2">
-                <Button @click="addProductByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
+                <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                 <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
             </div>
         </template>
@@ -76,18 +76,18 @@
         </div>
     </Drawer>
     <!-- End Edit -->
-    <!-- Begin AddProductById Modal -->
-    <Drawer v-model:visible="visibleAddProductById" :header="mix.name + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+    <!-- Begin AddMixById Modal -->
+    <Drawer v-model:visible="visibleAddMixById" :header="mix.title + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <AddProductById :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></AddProductById>
     </Drawer>
-    <!-- End AddProductById Modal -->
+    <!-- End AddMixById Modal -->
     <!-- Begin SellMix Modal -->
     <Drawer v-model:visible="visibleSellMix" :header="mix.title + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <SellMix :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellMix>
     </Drawer>
     <!-- End SellMix Modal -->
     <!-- Begin Info Modal -->
-    <Drawer v-model:visible="visibleInfo" position="top" modal :header="mix.title" style="height: auto" >
+    <Dialog  v-model:visible="visibleInfo" position="top" modal :header="mix.title" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" >
         <div>
             <div>
                 <h6>Tarkibi</h6>
@@ -111,15 +111,14 @@
                 </DataTable>
             </div>
         </div>
-    </Drawer>
+    </Dialog>
     <!-- End Info Modal -->
 </template>
 
 <script setup>
 import formatCurrency from '@/utils/PriceFormatter';
-import formatDateTime from '@/utils/DateTimeFormatter';
+import formatNumber from '@/utils/NumberFormatter';
 import axios from 'axios';
-import Badge from 'primevue/badge';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
@@ -135,7 +134,7 @@ const mix = ref({});
 const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
-const visibleAddProductById = ref(false);
+const visibleAddMixById = ref(false);
 const visibleSellMix = ref(false);
 const visibleInfo = ref(false);
 const isLoading = ref(false);
@@ -172,13 +171,13 @@ function closeDeletModal() {
     deletModal.value = false;
 }
 const overlayMenuItems = ref([
-    {
-        label: "Ma'lumot",
-        icon: 'pi pi-info',
-        command: () => {
-            visibleInfo.value = true;
-        }
-    },
+    // {
+    //     label: "Ma'lumot",
+    //     icon: 'pi pi-info',
+    //     command: () => {
+    //         visibleInfo.value = true;
+    //     }
+    // },
     {
         label: 'Batafsil',
         icon: 'pi pi-eye',
@@ -241,9 +240,9 @@ const editProductById = async () => {
     }
 };
 
-const addProductByIdModalOpen = (item) => {
-    visibleAddProductById.value = true;
-    product.value = item;
+const addMixByIdModalOpen = (item) => {
+    visibleAddMixById.value = true;
+    mix.value = item;
 };
 const SellMixModalOpen = (item) => {
     visibleSellMix.value = true;
@@ -253,7 +252,12 @@ const SellMixModalOpen = (item) => {
 
 const refreshGetMixFunction = () => {
     emits('getMix');
-    visibleAddProductById.value = false;
+    visibleAddMixById.value = false;
     visibleSellProduct.value = false;
 };
+
+const infoModal=(item)=>{
+    mix.value=item
+    visibleInfo.value = true;
+}
 </script>

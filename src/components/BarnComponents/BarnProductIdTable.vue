@@ -207,6 +207,7 @@ const getProductHistory = async () => {
     } catch (error) {
         console.error(error);
         toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response.data.message, life: 3000 });
+        loadingProduct.value = false;
     }
 };
 
