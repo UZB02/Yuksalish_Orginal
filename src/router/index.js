@@ -24,6 +24,11 @@ const router = createRouter({
                     component: () => import('../components/MixComponents/AddMix.vue')
                 },
                 {
+                    path: '/mix/:slug',
+                    name: 'Mix Add',
+                    component: () => import('../views/Mix/MixSlug/MixSlugView.vue')
+                },
+                {
                     path: '/barn',
                     name: 'barn',
                     component: () => import('../views/Barn/BarnView.vue')

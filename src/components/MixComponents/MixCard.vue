@@ -35,9 +35,14 @@
             </div>
         </template>
         <template #footer>
-            <div class="grid grid-cols-2 gap-2 border-t-2 dark:border-gray-600 pt-2">
-                <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
-                <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+            <div class="grid grid-cols-12 gap-2 border-t-2 dark:border-gray-600 pt-2">
+                <div class="col-span-11 grid grid-cols-2 gap-2">
+                    <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
+                    <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                </div>
+                <RouterLink :to="'/mix/' + item?._id" class="col-span-1 w-full px-0">
+                    <Button @click="SellMixModalOpen(item)" type="button" icon="pi pi-arrow-right" class="w-full" />
+                </RouterLink>
             </div>
         </template>
     </Card>
@@ -87,7 +92,7 @@
     </Drawer>
     <!-- End SellMix Modal -->
     <!-- Begin Info Modal -->
-    <Dialog  v-model:visible="visibleInfo" position="top" modal :header="mix.title" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" >
+    <Dialog v-model:visible="visibleInfo" position="top" modal :header="mix.title" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div>
             <div>
                 <h6>Tarkibi</h6>
@@ -98,14 +103,14 @@
                     <Column field="kg" header="Hajmi">
                         <template #body="{ data }"> {{ data.kg }} Kg </template>
                     </Column>
-                    <Column  header="Narx">
+                    <Column header="Narx">
                         <template #body="{ data }">
-                            {{ formatCurrency(data.product.buyyingPrice ) }}
+                            {{ formatCurrency(data.product.buyyingPrice) }}
                         </template>
                     </Column>
-                    <Column  header="Ja'mi summa">
+                    <Column header="Ja'mi summa">
                         <template #body="{ data }">
-                            {{ formatCurrency(data.product.buyyingPrice * data.kg ) }}
+                            {{ formatCurrency(data.product.buyyingPrice * data.kg) }}
                         </template>
                     </Column>
                 </DataTable>
@@ -116,8 +121,8 @@
 </template>
 
 <script setup>
-import formatCurrency from '@/utils/PriceFormatter';
 import formatNumber from '@/utils/NumberFormatter';
+import formatCurrency from '@/utils/PriceFormatter';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
@@ -256,8 +261,8 @@ const refreshGetMixFunction = () => {
     visibleSellProduct.value = false;
 };
 
-const infoModal=(item)=>{
-    mix.value=item
+const infoModal = (item) => {
+    mix.value = item;
     visibleInfo.value = true;
-}
+};
 </script>

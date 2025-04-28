@@ -14,7 +14,7 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="layout-topbar">
+    <div class="layout-topbar border-b">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" @click="toggleMenu">
                 <i class="pi pi-bars"></i>
