@@ -40,8 +40,8 @@
                     <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                     <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                 </div>
-                <RouterLink :to="'/mix/' + item?._id" class="col-span-1 w-full px-0">
-                    <Button @click="SellMixModalOpen(item)" type="button" icon="pi pi-arrow-right" class="w-full" />
+                <RouterLink :to="'/mix/history/' + item?._id" class="col-span-1 w-full px-0">
+                    <Button type="button" icon="pi pi-arrow-right" class="w-full" />
                 </RouterLink>
             </div>
         </template>
@@ -81,11 +81,11 @@
         </div>
     </Drawer>
     <!-- End Edit -->
-    <!-- Begin AddMixById Modal -->
-    <Drawer v-model:visible="visibleAddMixById" :header="mix.title + ` ` + `ga qo'shish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
-        <AddProductById :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></AddProductById>
-    </Drawer>
-    <!-- End AddMixById Modal -->
+    <!-- Begin MakeMixById Modal -->
+    <Dialog v-model:visible="visibleMakeMixById" modal  :header="mix.title + ` ` + `ni tayyorlash   `" position="center" :style="{ width: '40rem' }">
+        <MakeMixById :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></MakeMixById>
+    </Dialog>
+    <!-- End MakeMixById Modal -->
     <!-- Begin SellMix Modal -->
     <Drawer v-model:visible="visibleSellMix" :header="mix.title + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <SellMix :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellMix>
@@ -127,7 +127,7 @@ import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
-import AddProductById from './AddMixById.vue';
+import MakeMixById from './MakeMixById.vue';
 import SellMix from './SellMix.vue';
 
 const router = useRouter();
@@ -139,7 +139,7 @@ const mix = ref({});
 const deletModal = ref(false);
 const toast = useToast();
 const visibleEditProduct = ref(false);
-const visibleAddMixById = ref(false);
+const visibleMakeMixById = ref(false);
 const visibleSellMix = ref(false);
 const visibleInfo = ref(false);
 const isLoading = ref(false);
@@ -246,7 +246,7 @@ const editProductById = async () => {
 };
 
 const addMixByIdModalOpen = (item) => {
-    visibleAddMixById.value = true;
+    visibleMakeMixById.value = true;
     mix.value = item;
 };
 const SellMixModalOpen = (item) => {
@@ -257,7 +257,7 @@ const SellMixModalOpen = (item) => {
 
 const refreshGetMixFunction = () => {
     emits('getMix');
-    visibleAddMixById.value = false;
+    visibleMakeMixById.value = false;
     visibleSellProduct.value = false;
 };
 
