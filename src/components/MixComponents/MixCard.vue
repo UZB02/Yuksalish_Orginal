@@ -40,9 +40,8 @@
                     <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                     <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                 </div>
-                <RouterLink :to="'/mix/history/' + item?._id" class="col-span-1 w-full px-0">
-                    <Button type="button" icon="pi pi-arrow-right" class="w-full" />
-                </RouterLink>
+             
+                    <Button @click="router.push(`/mix/${item._id}`)" type="button" icon="pi pi-arrow-right" class="w-full" />
             </div>
         </template>
     </Card>

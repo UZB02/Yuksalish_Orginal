@@ -8,7 +8,7 @@
         </div>
         <Button @click="router.push(`/mix/add`)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
             <i class="pi pi-plus"></i>
-            <span class="hidden sm:inline">Maxsulot Qo'shish</span>
+            <span class="hidden sm:inline">Formula tayyorlash</span>
         </Button>
     </div>
 

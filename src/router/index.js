@@ -23,11 +23,11 @@ const router = createRouter({
                     name: 'Mix Add',
                     component: () => import('../components/MixComponents/AddMix.vue')
                 },
-                // {
-                //     path: '/mix/:slug',
-                //     name: 'Mix Add',
-                //     component: () => import('../views/Mix/MixSlug/MixSlugView.vue')
-                // },
+                {
+                    path: '/mix/:slug',
+                    name: 'Mix Id View',
+                    component: () => import('../views/Mix/MixSlug/MixSlugView.vue')
+                },
                 {
                     path: '/barn',
                     name: 'barn',
