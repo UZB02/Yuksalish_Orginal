@@ -14,7 +14,7 @@
                     <div class="flex flex-col md:items-center md:flex-row gap-2">
                         <span class="text-gray-400 text-sm">Tayyorlanish:</span>
                         <span class="text-lg font-medium">
-                            {{ formatNumber(item?.stock) }}
+                            {{ formatNumber(item?.quantity) }}
                         </span>
                     </div>
                     <div class="flex flex-col items-end md:items-center md:flex-row justify-end gap-2">

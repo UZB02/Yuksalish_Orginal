@@ -10,19 +10,19 @@
         <div class="w-full h-auto mx-auto bg-white dark:bg-gray-900/50 p-4 rounded-2xl mt-2 flex flex-col gap-5">
             <form class="grid grid-cols-1 gap-5" @submit.prevent="addProductToComposition">
                 <span class="grid gap-2">
-                    <label for="productTitle">Yangi aralashma nomi</label>
+                    <label for="productTitle">Yangi aralashma nomi <span class="text-red-500">*</span></label>
                     <InputText id="productTitle" size="large" v-model="productTitle" placeholder="Aralashma nomi" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="price">Tayyorlash narxi</label>
+                    <label for="price">Tayyorlash narxi <span class="text-red-500">*</span></label>
                     <InputNumber id="price" v-model="totalPrice" size="large" class="w-full" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="price">Sotish narxi</label>
+                    <label for="price">Sotish narxi <span class="text-red-500">*</span></label>
                     <InputNumber id="price" v-model="newProduct.price" size="large" class="w-full" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="description">Tafsilot</label>
+                    <label for="description">Tafsilot <span class="text-red-500">*</span></label>
                     <Textarea id="description" v-model="newProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
                 </span>
                 <div class="grid grid-cols-1 gap-5 bg-gray-200 p-4 rounded">

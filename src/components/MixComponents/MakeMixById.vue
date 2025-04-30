@@ -42,14 +42,17 @@ const isloading = ref(false);
 const mixPrice = ref(mix.value.price);
 
 const MakeMixById = async () => {
+    console.log(mix.value._id);
     isloading.value = true;
     try {
-        const res = await axios.post(`/mix/makeMix`, {
+        const res = await axios.post(`/api/mix/makeMix`, {
             mixId: mix.value._id,
             price: mixPrice.value
         });
-        isloading.value = false;
-        emits('refreshGetMixFunction');
+        if (res.status === 200) {
+            isloading.value = false;
+            emits('refreshGetMixFunction');
+        }
     } catch (error) {
         isloading.value = false;
         console.log(error);
