@@ -86,7 +86,7 @@
     </Dialog>
     <!-- End MakeMixById Modal -->
     <!-- Begin SellMix Modal -->
-    <Drawer v-model:visible="visibleSellMix" :header="mix.title + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+    <Drawer v-model:visible="visibleSellMix" :header="mix.title + ` ` + `dan sotish`" position="right" class="!w-full md:!w-100 lg:!w-[30rem]">
         <SellMix :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></SellMix>
     </Drawer>
     <!-- End SellMix Modal -->
