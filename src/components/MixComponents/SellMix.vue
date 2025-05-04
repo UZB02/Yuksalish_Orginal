@@ -74,7 +74,7 @@ import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref, watch } from 'vue';
 const toast = useToast();
 
-const emits = defineEmits(['refreshGetmixFunction']);
+const emits = defineEmits(['refreshGetMixFunction']);
 const props = defineProps({
     mix: { type: Object, required: true }
 });
@@ -125,7 +125,7 @@ const sellmixfunction = async () => {
         });
         if (res.status === 201) {
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Sotildi', life: 3000 });
-            emits('refreshGetmixFunction');
+            emits('refreshGetMixFunction');
         }
     } catch (error) {
         console.error('Xatolik:', error);
