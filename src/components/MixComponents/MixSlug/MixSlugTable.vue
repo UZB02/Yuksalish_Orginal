@@ -118,7 +118,7 @@
     </Dialog>
 
     <!-- View Modal -->
-    <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }"
+    <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }"
         :modal="true">
         <h3 class="text-lg font-semibold">{{ viewmix?.fullName }}</h3>
         <p class="mt-4">{{ viewmix?.description || 'Tafsilotlar mavjud emas!' }}</p>
