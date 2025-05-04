@@ -257,7 +257,7 @@ const SellMixModalOpen = (item) => {
 const refreshGetMixFunction = () => {
     emits('getMix');
     visibleMakeMixById.value = false;
-    visibleSellProduct.value = false;
+    visibleSellMix.value = false;
 };
 
 const infoModal = (item) => {

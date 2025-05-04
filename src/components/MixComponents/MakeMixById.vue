@@ -21,48 +21,51 @@
         <div class="grid grid-cols-1 gap-4">
             <span class="grid gap-2">
                 <label for="price">Sotish narxi (UZS)</label>
-                <InputNumber type="number" id="price" size="large" v-model="mixPrice" />
+                <InputNumber v-model="mixPrice" inputId="price" size="large"  />
             </span>
-            <Button @click="MakeMixById()" size="large" :label="isloading ? 'Loading...' : 'Tayyorlash'"></Button>
+            <Button @click="MakeMixById" size="large" :label="isloading ? 'Loading...' : 'Tayyorlash'" :disabled="isloading" />
         </div>
     </section>
 </template>
+
 <script setup>
-import formatCurrency from '@/utils/PriceFormatter';
+import { ref, computed, defineProps, defineEmits } from 'vue';
 import axios from 'axios';
-import { computed, defineEmits, defineProps, ref } from 'vue';
+import InputNumber from 'primevue/inputnumber';
+import Button from 'primevue/button';
+import formatCurrency from '@/utils/PriceFormatter';
 
 const emits = defineEmits(['refreshGetMixFunction']);
 const props = defineProps({
-    mix: { type: Object }
+    mix: { type: Object, required: true }
 });
 
-const mix = ref(props.mix);
+const mix = props.mix;
 const isloading = ref(false);
-const mixPrice = ref(mix.value.price);
+const mixPrice = ref(mix.price || 0);
 
 const MakeMixById = async () => {
-    console.log(mix.value._id);
     isloading.value = true;
     try {
-        const res = await axios.post(`/api/mix/makeMix`, {
-            mixId: mix.value._id,
+        const res = await axios.post('/api/mix/makeMix', {
+            mixId: mix._id,
             price: mixPrice.value
         });
         if (res.status === 200) {
-            isloading.value = false;
             emits('refreshGetMixFunction');
         }
     } catch (error) {
+        console.error(error);
+    } finally {
         isloading.value = false;
-        console.log(error);
     }
 };
 
 const profit = computed(() => {
-    return mixPrice.value * mix.value.totalKg - mix.value.basePrice * mix.value.totalKg;
+    return mixPrice.value * mix.totalKg - mix.basePrice * mix.totalKg;
 });
 </script>
+
 <style scoped>
 h6 {
     margin: 0;

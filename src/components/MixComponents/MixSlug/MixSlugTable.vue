@@ -1,7 +1,7 @@
 <template>
     <div class="relative overflow-x-auto shadow-md rounded">
         <!--Begin Skeleton loading table -->
-        <DataTable v-if="loadingProduct" :value="Array(5).fill({})" scrollable tableStyle="min-width: 1800px">
+        <DataTable v-if="loadingmix" :value="Array(5).fill({})" scrollable tableStyle="min-width: 1800px">
             <Column header="Haridor">
                 <template #body>
                     <Skeleton width="100px" height="1rem" />
@@ -50,12 +50,12 @@
             </Column>
         </DataTable>
         <!--End Skeleton loading table -->
-        <DataTable v-else ref="tableRef" :value="productHistory?.history ? productHistory?.history : []" scrollable tableStyle="min-width: 1800px">
-            <Column field="name" header="Haridor"></Column>
-            <Column field="phone" header="Tell">
+        <DataTable v-else ref="tableRef" :value="mixHistory?.history ? mixHistory?.history : []" scrollable tableStyle="min-width: 1800px">
+            <Column field="fullName" header="Haridor"></Column>
+            <Column field="phoneNumber" header="Tell">
                 <template #body="slotProps">
-                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.phone" class="text-blue-800 hover:underline dark:text-white">
-                        {{ slotProps.data.phone }}
+                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.phoneNumber" class="text-blue-800 hover:underline dark:text-white">
+                        {{ slotProps.data.phoneNumber }}
                     </a>
                 </template>
             </Column>
@@ -72,14 +72,14 @@
                     {{ formatCurrency(slotProps.data.originalPrice) }}
                 </template>
             </Column>
-            <Column field="totalAmount" header="Tushkan Summa">
+            <Column field="size" header="Tushkan Summa">
                 <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.totalAmount) }}
+                    {{ formatCurrency(slotProps.data.size * slotProps.data.sellingPrice) }}
                 </template>
             </Column>
-            <Column field="profit" header="Foyda">
+            <Column field="size" header="Foyda">
                 <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.profit) }}
+                    {{ formatCurrency(slotProps.data.size * (slotProps.data.sellingPrice - slotProps.data.originalPrice)) }}
                 </template>
             </Column>
             <Column field="createdAt" header="Sotilgan Vaqti">
@@ -90,7 +90,7 @@
             <Column header="Amallar">
                 <template #body="slotProps">
                     <div class="flex gap-3">
-                        <button v-tooltip.top="'O\'chirish'" @click="deletProductHistoryModal(slotProps.data)">
+                        <button v-tooltip.top="'O\'chirish'" @click="deletmixHistoryModal(slotProps.data)">
                             <i class="pi pi-trash text-red-500 mr-2"></i>
                         </button>
                         <button v-tooltip.top="'Tafsilot'" @click="viewDescription(slotProps.data)">
@@ -102,90 +102,89 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellProductModalOpen(product.data)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button @click="SellmixModalOpen(mix.data)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
-                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="mixhistoryexportToExcelById(mixHistory.history, mix.data.title)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>
                         </Button>
                     </div>
                     <div class="text-end pb-4">
-                        <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getProductHistory()" class="w-full lg:w-44"></DatePicker>
+                        <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getMixHistoryById()" class="w-full lg:w-44"></DatePicker>
                     </div>
                 </div>
             </template>
         </DataTable>
     </div>
     <!--Begin Delete Modal -->
-    <!-- <Dialog header="O'chirish" v-model:visible="deletModal" :style="{ width: '350px' }" :modal="true">
+    <Dialog header="O'chirish" v-model:visible="deletModal" :style="{ width: '350px' }" :modal="true">
         <div class="flex items-center justify-center">
             <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem" />
             <span>O'chirishga ishonchingiz komilmi?</span>
         </div>
         <template #footer>
             <Button label="Yo'q" icon="pi pi-times" @click="deletModal = false" text severity="secondary" />
-            <Button :label="isloading ? 'Loading...' : 'O\'chirish'" icon="pi pi-trash" @click="deleteProductHistory()" severity="danger" outlined autofocus />
+            <Button :label="isloading ? 'Loading...' : 'O\'chirish'" icon="pi pi-trash" @click="deletemixHistory()" severity="danger" outlined autofocus />
         </template>
-    </Dialog> -->
+    </Dialog>
     <!--End Delete Modal -->
     <!-- Paginator -->
     <Paginator :rows="limit" :totalRecords="totalItems" :rowsPerPageOptions="[5, 10, 20, 30]" @page="onPageChange" />
 
     <!--Begin Modal View -->
-    <!-- <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }" :modal="true">
-        <h3 class="text-lg font-semibold">{{ viewProduct?.name }}</h3>
-        <p class="mt-4">{{ viewProduct?.description || 'Tafsilotlar mavjud emas!' }}</p>
+    <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }" :modal="true">
+        <h3 class="text-lg font-semibold">{{ viewmix?.name }}</h3>
+        <p class="mt-4">{{ viewmix?.description || 'Tafsilotlar mavjud emas!' }}</p>
         <template #footer>
             <Button severity="danger" label="Yopish" @click="viewVisible = false" />
         </template>
-    </Dialog> -->
+    </Dialog>
     <!-- End Modal View -->
 
-    <!-- Begin SellProduct Modal -->
-    <!-- <Drawer v-model:visible="visibleSellProduct" :header="product.data.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
-        <SellProduct :product="product.data" @refreshGetProductFunction="refreshGetProductFunction"></SellProduct>
-    </Drawer> -->
-    <!-- End SellProduct Modal -->
+    <!-- Begin Sellmix Modal -->
+    <Drawer v-model:visible="visibleSellmix" :header="mix.data.name + ` ` + `dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+        <Sellmix :mix="mix.data" @refreshGetmixFunction="refreshGetmixFunction"></Sellmix>
+    </Drawer>
+    <!-- End Sellmix Modal -->
     <!-- Toast -->
     <Toast />
 </template>
 
 <script setup>
+import formatDateTime from '@/utils/DateTimeFormatter';
+import formatCurrency from '@/utils/PriceFormatter';
+import mixhistoryexportToExcelById from '@/utils/MixHistoryExcelFormater'
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-// import formatDateTime from '../../utils/DateTimeFormatter';
-// import exportToExcel from '../../utils/ExcelFormatter';
-// import formatCurrency from '../../utils/PriceFormatter';
-// import SellProduct from './BarnProduct/SellProduct.vue';
-const emits = defineEmits(['getProduct']);
+const emits = defineEmits(['getMixById']);
 
-const product = defineProps({
+const mix = defineProps({
     data: {
         type: Object,
         required: true
     }
 });
-const id = '680727ce3defc63080dbdfcc';
-const productHistory = ref(null);
+const id = useRoute().params.slug;
+const mixHistory = ref(null);
 const page = ref(1);
 const limit = ref(5);
 const totalItems = ref(0);
 const viewVisible = ref(false);
 const deletModal = ref(false);
-const viewProduct = ref(null);
+const viewmix = ref(null);
 const isloading = ref(false);
-const loadingProduct = ref(true);
-const delProduct = ref({});
+const loadingmix = ref(true);
+const delmix = ref({});
 const toast = useToast();
 const tableRef = ref(null);
 const date = ref();
-const visibleSellProduct = ref(false);
+const visibleSellmix = ref(false);
 
-const getProductHistory = async () => {
+const getMixHistoryById = async () => {
     try {
         let dateParam = '';
         let day = '';
@@ -197,33 +196,33 @@ const getProductHistory = async () => {
             year = date.value.getFullYear(); // 2025
             dateParam = `&day=${day}&month=${month}&year=${year}`;
         }
-        console.log(dateParam);
-        const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
+        const response = await axios.get(`/api/mix-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
         if ((response.status = 200)) {
-            loadingProduct.value = false;
-            productHistory.value = response.data;
+            loadingmix.value = false;
+            mixHistory.value = response.data;
             totalItems.value = response.data.total;
         }
+        console.log(response);
     } catch (error) {
         console.error(error);
         toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response.data.message, life: 3000 });
-        loadingProduct.value = false;
+        loadingmix.value = false;
     }
 };
 
-const deletProductHistoryModal = (item) => {
+const deletmixHistoryModal = (item) => {
     deletModal.value = true;
-    delProduct.value = item;
+    delmix.value = item;
 };
-const deleteProductHistory = async () => {
+const deletemixHistory = async () => {
     isloading.value = true;
     try {
-        const res = await axios.delete(`/api/product-history/${delProduct.value._id}`);
+        const res = await axios.delete(`/api/mix-history/${delmix.value._id}`);
         if ((res.status = 200)) {
             isloading.value = false;
-            toast.add({ severity: 'success', summary: 'Bajarildi', detail: delProduct.value.name + ' ' + "tarixi o'chirildi", life: 3000 });
+            toast.add({ severity: 'success', summary: 'Bajarildi', detail: delmix.value.name + ' ' + "tarixi o'chirildi", life: 3000 });
             deletModal.value = false;
-            getProductHistory();
+            getMixHistoryById();
         }
     } catch (error) {
         console.error(error);
@@ -231,27 +230,27 @@ const deleteProductHistory = async () => {
 };
 
 const viewDescription = (item) => {
-    viewProduct.value = item;
+    viewmix.value = item;
     viewVisible.value = true;
 };
 
 const onPageChange = (event) => {
     page.value = event.page + 1;
     limit.value = event.rows;
-    getProductHistory();
+    getMixHistoryById();
 };
 
-const SellProductModalOpen = () => {
-    visibleSellProduct.value = true;
+const SellmixModalOpen = () => {
+    visibleSellmix.value = true;
 };
-const refreshGetProductFunction = () => {
-    visibleSellProduct.value = false;
-    emits('getProduct');
-    getProductHistory();
+const refreshGetmixFunction = () => {
+    visibleSellmix.value = false;
+    emits('getMixById');
+    getMixHistoryById();
 };
 
 watch(date, (newValue, oldValue) => {
-    getProductHistory();
+    getMixHistoryById();
 });
-onMounted(getProductHistory);
+onMounted(getMixHistoryById);
 </script>

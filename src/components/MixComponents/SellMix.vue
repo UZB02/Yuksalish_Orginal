@@ -13,25 +13,25 @@
 
         <div class="grid grid-cols-1 gap-4">
             <span class="grid gap-2">
-                <label for="customer">Xaridor</label>
-                <InputText id="customer" v-model="sellProduct.customer" placeholder="Xaridor Ismini Kiriting" />
+                <label for="fullName">Xaridor</label>
+                <InputText id="fullName" v-model="sellMix.fullName" placeholder="Xaridor Ismini Kiriting" />
             </span>
             <span class="grid gap-2">
-                <label for="phone">Xaridor Raqami</label>
-                <InputMask id="phone" v-model="sellProduct.phone" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
+                <label for="phoneNumber">Xaridor Raqami</label>
+                <InputMask id="phoneNumber" v-model="sellMix.phoneNumber" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
             </span>
             <span class="grid gap-2">
                 <label for="productSize">Mahsulot Hajmi (Kg)</label>
-                <InputNumber id="productSize" v-model="sellProduct.size" />
+                <InputNumber id="productSize" v-model="sellMix.size" />
             </span>
             <span class="grid gap-2">
-                <label for="price">Sotish narxi (UZS)</label>
-                <InputNumber id="price" v-model="sellProduct.price" />
-                <small v-if="sellProduct.price < sellProduct.buyyingPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
+                <label for="sellingPrice">Sotish narxi (UZS)</label>
+                <InputNumber id="sellingPrice" v-model="sellMix.sellingPrice" />
+                <small v-if="sellMix.sellingPrice < sellMix.originalPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
                 <label for="description">Tafsilot</label>
-                <Textarea id="productDescription" v-model="sellProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
+                <Textarea id="productDescription" v-model="sellMix.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
             </span>
             <div class="flex items-center">
                 <ToggleButton v-model="checkedNote" class="w-24" onLabel="Eslatma" offLabel="Eslatma" />
@@ -75,13 +75,13 @@ const mix = props.mix;
 const isloading = ref(false);
 const checkedNote = ref(false);
 
-const sellProduct = ref({
-    customer: '',
-    productId: mix._id,
+const sellMix = ref({
+    fullName: '',
+    mixId: mix._id,
     size: null,
-    price: mix.price,
-    buyyingPrice: mix.buyyingPrice,
-    phone: '',
+    sellingPrice: mix.sellingPrice,
+    originalPrice: mix.originalPrice,
+    phoneNumber: '',
     currency: 'UZS',
     description: ''
 });
@@ -93,23 +93,23 @@ const sellProductNote = ref({
 });
 
 const sellProductfunction = async () => {
-    if (sellProduct.value.customer == '' || sellProduct.value.price == '' || sellProduct.value.size == null) {
+    if (sellMix.value.fullName == '' || sellMix.value.sellingPrice == '' || sellMix.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;
     }
     isloading.value = true;
     try {
         const res = await axios.post(`/api/product-history`, {
-            name: sellProduct.value.customer,
-            productId: sellProduct.value.productId,
-            size: sellProduct.value.size,
-            sellingPrice: sellProduct.value.price,
-            originalPrice: sellProduct.value.buyyingPrice,
-            phone: sellProduct.value.phone,
-            currency: sellProduct.value.currency,
-            description: sellProduct.value.description,
-            totalAmount: sellProduct.value.price * sellProduct.value.size,
-            profit: sellProduct.value.price * sellProduct.value.size - sellProduct.value.buyyingPrice * sellProduct.value.size
+            name: sellMix.value.fullName,
+            mixId: sellMix.value.mixId,
+            size: sellMix.value.size,
+            sellingPrice: sellMix.value.sellingPrice,
+            originalPrice: sellMix.value.originalPrice,
+            phoneNumber: sellMix.value.phoneNumber,
+            currency: sellMix.value.currency,
+            description: sellMix.value.description,
+            totalAmount: sellMix.value.sellingPrice * sellMix.value.size,
+            profit: sellMix.value.sellingPrice * sellMix.value.size - sellMix.value.originalPrice * sellMix.value.size
         });
         if (res.status === 201) {
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Sotildi', life: 3000 });
@@ -123,9 +123,9 @@ const sellProductfunction = async () => {
     }
 };
 
-watch(sellProduct, (newValue) => {
-    sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov qilish vaqtingiz keldi!`;
-    sellProductNote.value.adminNote = `${newValue.customer} dan ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov olish vaqti keldi`;
+watch(sellMix, (newValue) => {
+    sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.sellingPrice * newValue.size)} to'lov qilish vaqtingiz keldi!`;
+    sellProductNote.value.adminNote = `${newValue.fullName} dan ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.sellingPrice * newValue.size)} to'lov olish vaqti keldi`;
 }, { deep: true });
 </script>
 
