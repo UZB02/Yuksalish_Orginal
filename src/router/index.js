@@ -24,6 +24,11 @@ const router = createRouter({
                     component: () => import('../components/MixComponents/AddMix.vue')
                 },
                 {
+                    path: '/edit-mix/:id',
+                    name: 'Mix Edit By Id',
+                    component: () => import('../components/MixComponents/EditMixById.vue')
+                },
+                {
                     path: '/mix/:slug',
                     name: 'Mix Id View',
                     component: () => import('../views/Mix/MixSlug/MixSlugView.vue')

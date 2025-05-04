@@ -213,7 +213,7 @@ const deletemixHistory = async () => {
             life: 3000
         });
         return;
-    }
+    } 
     isloading.value = true;
     try {
         const res = await axios.delete(`/api/mix/${delmix.value._id}`);

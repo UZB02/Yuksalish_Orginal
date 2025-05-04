@@ -40,8 +40,8 @@
                     <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
                     <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                 </div>
-             
-                    <Button @click="router.push(`/mix/${item._id}`)" type="button" icon="pi pi-arrow-right" class="w-full" />
+
+                <Button @click="router.push(`/mix/${item._id}`)" type="button" icon="pi pi-arrow-right" class="w-full" />
             </div>
         </template>
     </Card>
@@ -81,7 +81,7 @@
     </Drawer>
     <!-- End Edit -->
     <!-- Begin MakeMixById Modal -->
-    <Dialog v-model:visible="visibleMakeMixById" modal  :header="mix.title + ` ` + `ni tayyorlash   `" position="center" :style="{ width: '40rem' }">
+    <Dialog v-model:visible="visibleMakeMixById" modal :header="mix.title + ` ` + `ni tayyorlash   `" position="center"  class="!w-full md:!w-100 lg:!w-[50rem]">
         <MakeMixById :mix="mix" @refreshGetMixFunction="refreshGetMixFunction"></MakeMixById>
     </Dialog>
     <!-- End MakeMixById Modal -->
@@ -193,7 +193,7 @@ const overlayMenuItems = ref([
         label: 'Taxrirlash',
         icon: 'pi pi-refresh',
         command: () => {
-            visibleEditProduct.value = true;
+            router.push(`/edit-mix/${mix.value._id}`);
         }
     },
     {

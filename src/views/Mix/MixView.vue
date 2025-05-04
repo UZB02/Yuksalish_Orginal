@@ -40,6 +40,7 @@ const getMix = async () => {
     try {
         const res = await axios.get('/api/mix');
         data.value = res.data;
+        console.log(data.value);
         if (res.status == 200) {
             isloading.value = false;
             visibleAddMix.value = false;

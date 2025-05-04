@@ -1,7 +1,7 @@
 <template>
     <div class="h-auto w-full">
         <div class="flex items-center justify-between">
-            <h4 class="font-semibold">Mahsulot Tarkibi</h4>
+            <h4 class="font-semibold">Tahrirlash</h4>
             <span>
                 <h6>Hajm: {{ totalSize }} Kg</h6>
             </span>
@@ -10,12 +10,12 @@
         <div class="w-full h-auto mx-auto bg-white dark:bg-gray-900/50 p-4 rounded-2xl mt-2 flex flex-col gap-5">
             <form class="grid grid-cols-1 gap-5" @submit.prevent="addProductToComposition">
                 <span class="grid gap-2">
-                    <label for="productTitle">Yangi aralashma nomi</label>
-                    <InputText id="productTitle" size="large" v-model="productTitle" placeholder="Aralashma nomi" />
+                    <label for="mixTitle">Aralashma nomi</label>
+                    <InputText id="mixTitle" size="large" v-model="newProduct.title" placeholder="Aralashma nomi" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="price">Tayyorlash narxi</label>
-                    <InputNumber id="price" v-model="totalPrice" size="large" class="w-full" />
+                    <label for="basePrice">Tayyorlash narxi</label>
+                    <InputNumber id="basePrice" v-model="totalPrice" size="large" class="w-full" disabled />
                 </span>
                 <span class="grid gap-2">
                     <label for="price">Sotish narxi</label>
@@ -37,7 +37,7 @@
                         <div v-if="changedProduct?.size < changeAmount" class="text-red-600 text-xs">Mavjud: {{ changedProduct?.size }} kg</div>
                     </span>
                     <Button @click="addProductToComposition()" size="large" label="Qo'shish"></Button>
-                    <!-- Jadval -->
+
                     <DataTable :value="newProduct?.composition || []" scrollable tableStyle="min-width: 800px;">
                         <Column header="ID">
                             <template #body="{ data }">
@@ -59,12 +59,12 @@
                             </template>
                         </Column>
                     </DataTable>
-                    <!-- Tugmalar -->
                 </div>
             </form>
+
             <div class="mt-10 flex justify-end gap-3">
-                <Button @click="createNewMix()" size="large" :label="isloading ? 'Loading...' : 'Saqlash'"></Button>
-                <Button @click="clearProducts()" size="large" label="Bekor qilish" severity="secondary"></Button>
+                <Button @click="updateMix" size="large" :label="isloading ? 'Yuklanmoqda...' : 'Yangilash'"></Button>
+                <Button @click="cancelEdit" size="large" label="Bekor qilish" severity="secondary"></Button>
             </div>
         </div>
     </div>
@@ -76,25 +76,32 @@ import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+import formatCurrency from '@/utils/PriceFormatter';
+import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
+import Select from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
-import formatCurrency from '../../utils/Price'
+import Textarea from 'primevue/textarea';
 
 const router = useRouter();
 const toast = useToast();
+const mixId = router.currentRoute.value.params.id;
 
+const mix = ref(null);
 const products = ref([]);
 const product = ref(null);
-const productTitle = ref('');
 const changeAmount = ref(null);
 const changedProduct = ref(null);
-const newProduct = ref({ title: '', composition: [] });
+const mixTitle = ref('');
 const isloading = ref(false);
-onMounted(() => {
-    loadSavedProduct();
-    getProducts();
+
+const newProduct = ref({
+    title: '',
+    description: '',
+    price: 0,
+    composition: []
 });
 
 const getProducts = async () => {
@@ -106,17 +113,30 @@ const getProducts = async () => {
     }
 };
 
+const getMixById = async () => {
+    try {
+        const res = await axios.get(`/api/mix/${mixId}`);
+        mix.value = res.data;
+
+        newProduct.value = {
+            title: res.data.title,
+            description: res.data.description,
+            price: res.data.price,
+            composition: res.data.products.map((p) => ({
+                id: p.product._id,
+                name: p.product.name,
+                kg: p.kg,
+                buyyingPrice: p.product.buyyingPrice
+            }))
+        };
+    } catch (err) {
+        console.error('Mixni olishda xatolik:', err);
+    }
+};
+
 watch(product, (selected) => {
     changedProduct.value = selected;
 });
-
-watch(
-    [productTitle, newProduct],
-    () => {
-        saveProducts();
-    },
-    { deep: true }
-);
 
 const addProductToComposition = () => {
     if (!changedProduct.value || !changeAmount.value) return;
@@ -145,77 +165,54 @@ const deleteProduct = (productItem) => {
     const index = newProduct.value.composition.findIndex((p) => p.id === productItem.id);
     if (index !== -1) {
         newProduct.value.composition.splice(index, 1);
-        saveProducts();
-    }
-};
-
-const clearProducts = () => {
-    newProduct.value = { title: '', composition: [] };
-    productTitle.value = '';
-    localStorage.removeItem('newProduct');
-    router.push('/mix');
-};
-
-const saveProducts = () => {
-    newProduct.value.title = productTitle.value;
-    localStorage.setItem('newProduct', JSON.stringify(newProduct.value));
-};
-
-const loadSavedProduct = () => {
-    const savedData = JSON.parse(localStorage.getItem('newProduct'));
-    if (savedData) {
-        productTitle.value = savedData.title || '';
-        newProduct.value = {
-            title: savedData.title || '',
-            totalKg: totalSize,
-            price: savedData.price,
-            basePrice: totalPrice,
-            description: savedData.description,
-            composition: savedData.composition || []
-        };
     }
 };
 
 const totalSize = computed(() => {
-    return newProduct.value.composition.reduce((sum, item) => {
-        return sum + Number(item.kg || 0);
-    }, 0);
-});
-const totalPrice = computed(() => {
-    return newProduct.value.composition.reduce((sum, item) => {
-        return sum + Number(item.buyyingPrice || 0);
-    }, 0);
+    return newProduct.value.composition.reduce((sum, item) => sum + Number(item.kg || 0), 0);
 });
 
-const createNewMix = async () => {
-    console.log('Yangi mahsulot:', newProduct.value);
+const totalPrice = computed(() => {
+    return newProduct.value.composition.reduce((sum, item) => sum + item.buyyingPrice, 0);
+});
+
+const updateMix = async () => {
     isloading.value = true;
-    // Har bir mahsulotni kerakli formatga o'tkazamiz
+
     const mappedProducts = newProduct.value.composition.map((item) => ({
         product: item.id,
         kg: item.kg
     }));
+
     try {
-        const res = await axios.post(`/api/mix`, {
+        const res = await axios.put(`/api/mix/${mixId}`, {
             title: newProduct.value.title,
             description: newProduct.value.description,
             price: newProduct.value.price,
             basePrice: totalPrice.value,
             totalKg: totalSize.value,
             stock: 20,
-            quantity: 10,
+            sold: 10,
             products: mappedProducts
         });
-        console.log(res);
-        if (res.status === 201) {
-            isloading.value = false;
-            toast.add({ severity: 'success', summary: 'Bajarildi', detail: "Muvofaqqiyatli qo'shildi", life: 3000 });
-            clearProducts();
+
+        if (res.status === 200) {
+            toast.add({ severity: 'success', summary: 'Yangilandi', detail: 'Mix muvaffaqiyatli yangilandi', life: 3000 });
+            router.push('/mix');
         }
     } catch (error) {
-        console.error('Xatolik:', error);
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response?.data?.message || 'Xatolik yuz berdi', life: 3000 });
+    } finally {
         isloading.value = false;
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response.data.message, life: 3000 });
     }
 };
+
+const cancelEdit = () => {
+    router.push('/mix');
+};
+
+onMounted(() => {
+    getProducts();
+    getMixById();
+});
 </script>
