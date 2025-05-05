@@ -46,7 +46,12 @@
                         </Column>
                         <Column field="name" header="Qo'shilgan mahsulotlar" />
                         <Column header="Hajmi">
-                            <template #body="{ data }"> {{ data.kg }} Kg </template>
+                            <template #body="{ data }">
+                                <div class="flex items-center gap-2">
+                                    <InputNumber v-model="data.kg" :inputStyle="{ width: '100px' }" :min="0" />
+                                    <span>Kg</span>
+                                </div>
+                            </template>
                         </Column>
                         <Column header="Narx">
                             <template #body="{ data }"> {{ formatCurrency(data.buyyingPrice * data.kg) }} </template>
