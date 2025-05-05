@@ -37,6 +37,17 @@
                 <label for="payed">Qolgan summa</label>
                 <InputNumber id="payed" v-model="sellMix.remaining" />
             </span>
+            <!-- sms -->
+            <div>
+                <span class="grid gap-2">
+                    <label for="buyyerNote">Haridor uchun</label>
+                    <Textarea id="buyyerNote" v-model="sellSMS.buyyerNote" variant="filled" rows="5" cols="30" placeholder="Haridor uschun eslatma kiriting" />
+                </span>
+                <span class="grid gap-2 mt-2">
+                    <label for="adminNote">Sotuvchi uchun</label>
+                    <Textarea id="adminNote" v-model="sellSMS.adminNote" variant="filled" rows="5" cols="30" placeholder="Sotuvchi uschun eslatma kiriting" />
+                </span>
+            </div>
             <span class="grid gap-2">
                 <label for="description">Tafsilot</label>
                 <Textarea id="mixDescription" v-model="sellMix.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
@@ -97,6 +108,11 @@ const sellMix = ref({
     // currency: 'UZS',
 });
 
+const sellSMS = ref({
+    adminNote: '',
+    buyyerNote: ''
+});
+
 const sellmixNote = ref({
     buyyerNote: '',
     adminNote: '',
@@ -143,6 +159,8 @@ watch(
         sellMix.value.remaining = total - payed;
         sellmixNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${mix.title} uchun ${formatCurrency(sellMix.value.remaining)} to'lov qilish vaqtingiz keldi!`;
         sellmixNote.value.adminNote = `${newValue.fullName} dan ${newValue.size} Kg ${mix.title} uchun ${formatCurrency(sellMix.value.remaining)} to'lov olish vaqti keldi`;
+        sellSMS.value.adminNote = `Siz  ${mix.title} dan  ${newValue.fullName} ga ${newValue.size} Kg mahsulotni  ${formatCurrency(newValue.size * newValue.sellingPrice)} ga sotdingiz. To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)}  `;
+        sellSMS.value.buyyerNote = `Siz Yuksalish-farm dan ${newValue.size} kg ${mix.title} mahsuloti  sotib oldingiz. To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)}  `;
     },
     { deep: true }
 );

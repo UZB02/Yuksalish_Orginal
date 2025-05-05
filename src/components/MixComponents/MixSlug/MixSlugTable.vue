@@ -70,11 +70,11 @@
             <Column field="size" header="Sotilgan Mahsulot">
                 <template #body="slotProps">{{ slotProps.data.size }} Kg</template>
             </Column>
-            <Column field="sellingPrice" header="Sotilish Narxi">
-                <template #body="slotProps">{{ formatCurrency(slotProps.data.sellingPrice) }}</template>
-            </Column>
             <Column field="originalPrice" header="Tannarxi">
                 <template #body="slotProps">{{ formatCurrency(slotProps.data.originalPrice) }}</template>
+            </Column>
+            <Column field="sellingPrice" header="Sotilish Narxi">
+                <template #body="slotProps">{{ formatCurrency(slotProps.data.sellingPrice) }}</template>
             </Column>
             <Column field="size" header="Tushkan Summa">
                 <template #body="slotProps">
@@ -92,9 +92,9 @@
             <Column header="Amallar">
                 <template #body="slotProps">
                     <div class="flex gap-3">
-                        <button v-tooltip.top="'O\'chirish'" @click="deletmixHistoryModal(slotProps.data)">
+                        <!-- <button v-tooltip.top="'O\'chirish'" @click="deletmixHistoryModal(slotProps.data)">
                             <i class="pi pi-trash text-red-500 mr-2"></i>
-                        </button>
+                        </button> -->
                         <button v-tooltip.top="'Tafsilot'" @click="viewDescription(slotProps.data)">
                             <i class="pi pi-eye"></i>
                         </button>
