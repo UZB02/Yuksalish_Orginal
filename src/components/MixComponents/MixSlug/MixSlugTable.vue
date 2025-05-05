@@ -130,7 +130,7 @@
     <!-- Sellmix Drawer -->
     <Drawer v-model:visible="visibleSellmix" :header="mix.data.title + ` dan sotish`" position="right"
         class="!w-full md:!w-96 lg:!w-[30rem]">
-        <SellMix :mix="mix.data" @refreshGetmixFunction="refreshGetmixFunction" />
+        <SellMix :mix="mix.data" @refreshGetMixFunction="refreshGetMixFunction" />
     </Drawer>
 
     <!-- Paginator -->
@@ -255,7 +255,7 @@ const SellmixModalOpen = () => {
     visibleSellmix.value = true;
 };
 
-const refreshGetmixFunction = () => {
+const refreshGetMixFunction = () => {
     visibleSellmix.value = false;
     emits('getMixById');
     getMixHistoryById();
