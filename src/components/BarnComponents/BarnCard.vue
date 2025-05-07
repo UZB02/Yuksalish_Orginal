@@ -64,11 +64,11 @@
             </span>
             <span class="grid grid-cols-1 gap-2">
                 <label for="price">Sotib olish narxi</label>
-                <InputNumber type="number" id="price" v-model="editproduct.price" />
+                <InputNumber type="number" id="price" v-model="editproduct.buyyingPrice" />
             </span>
             <span class="grid grid-cols-1 gap-2">
                 <label for="buyyingPrice">Sotish narxi</label>
-                <InputNumber type="number" id="buyyingPrice" v-model="editproduct.buyyingPrice" />
+                <InputNumber type="number" id="buyyingPrice" v-model="editproduct.price" />
             </span>
             <Button @click="editProductById()" size="large" :label="isLoading ? 'Yuklanmoqda...' : 'Taxrirlash'"></Button>
         </div>

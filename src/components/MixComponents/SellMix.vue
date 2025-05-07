@@ -13,28 +13,28 @@
 
         <div class="grid grid-cols-1 gap-4">
             <span class="grid gap-2">
-                <label for="fullName">Xaridor</label>
+                <label for="fullName">Xaridor <span class="text-red-500">*</span></label>
                 <InputText id="fullName" v-model="sellMix.fullName" placeholder="Xaridor Ismini Kiriting" />
             </span>
             <span class="grid gap-2">
-                <label for="phoneNumber">Xaridor Raqami</label>
+                <label for="phoneNumber">Xaridor Raqami <span class="text-red-500">*</span></label>
                 <InputMask id="phoneNumber" v-model="sellMix.phoneNumber" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
             </span>
             <span class="grid gap-2">
-                <label for="mixSize">Mahsulot Hajmi (Kg)</label>
+                <label for="mixSize">Mahsulot Hajmi (Kg) <span class="text-red-500">*</span></label>
                 <InputNumber id="mixSize" v-model="sellMix.size" />
             </span>
             <span class="grid gap-2">
-                <label for="sellingPrice">Sotish narxi (UZS)</label>
+                <label for="sellingPrice">Sotish narxi (UZS) <span class="text-red-500">*</span></label>
                 <InputNumber id="sellingPrice" v-model="sellMix.sellingPrice" />
                 <small v-if="sellMix.sellingPrice < sellMix.originalPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
-                <label for="payed">To'langan summa</label>
+                <label for="payed">To'langan summa (UZS)  <span class="text-red-500">*</span></label>
                 <InputNumber id="payed" v-model="sellMix.payed" />
             </span>
             <span class="grid gap-2">
-                <label for="payed">Qolgan summa</label>
+                <label for="payed">Qolgan summa (UZS) <span class="text-red-500">*</span></label>
                 <InputNumber id="payed" v-model="sellMix.remaining" />
             </span>
             <!-- sms -->
@@ -159,8 +159,8 @@ watch(
         sellMix.value.remaining = total - payed;
         sellmixNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${mix.title} uchun ${formatCurrency(sellMix.value.remaining)} to'lov qilish vaqtingiz keldi!`;
         sellmixNote.value.adminNote = `${newValue.fullName} dan ${newValue.size} Kg ${mix.title} uchun ${formatCurrency(sellMix.value.remaining)} to'lov olish vaqti keldi`;
-        sellSMS.value.adminNote = `Siz  ${mix.title} dan  ${newValue.fullName} ga ${newValue.size} Kg mahsulotni  ${formatCurrency(newValue.size * newValue.sellingPrice)} ga sotdingiz. To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)}  `;
-        sellSMS.value.buyyerNote = `Siz Yuksalish-farm dan ${newValue.size} kg ${mix.title} mahsuloti  sotib oldingiz. To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)}  `;
+        sellSMS.value.adminNote = `Siz  ${mix.title} dan  ${newValue.fullName} ga ${newValue.size} Kg mahsulotni  ${formatCurrency(newValue.size * newValue.sellingPrice)} ga sotdingiz.To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)} `;
+        sellSMS.value.buyyerNote = `Siz Yuksalish-farm dan ${newValue.size} kg ${mix.title} mahsuloti  sotib oldingiz.Jami summa ${formatCurrency(newValue.size * newValue.sellingPrice)}.To'langan summa ${formatCurrency(payed)}. Qolgan summa  ${formatCurrency(sellMix.value.remaining)}  `;
     },
     { deep: true }
 );
