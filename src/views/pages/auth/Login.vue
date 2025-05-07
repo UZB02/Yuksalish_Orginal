@@ -45,12 +45,12 @@ const login = async () => {
                         <span class="text-muted-color font-medium">Boshlash uchun kirish</span>
                     </div>
 
-                    <div>
+                    <form @submit.prevent="login()">
                         <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                        <InputText id="email1" type="text" size="large" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
 
                         <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Parol</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                        <Password id="password1" v-model="password" size="large" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
 
                         <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                             <div class="flex items-center">
@@ -59,8 +59,8 @@ const login = async () => {
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Parolni unutdingizmi?</span>
                         </div>
-                        <Button :label="loadinLogin ? 'Loading...' : 'Kirish'" class="w-full" @click="login"></Button>
-                    </div>
+                        <Button :label="loadinLogin ? 'Loading...' : 'Kirish'" type="submit" class="w-full" @click="login"></Button>
+                    </form>
                 </div>
             </div>
         </div>

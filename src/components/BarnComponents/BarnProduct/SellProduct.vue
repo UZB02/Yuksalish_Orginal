@@ -30,6 +30,14 @@
                 <small v-if="sellProduct.price < sellProduct.buyyingPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
+                <label for="payed">To'langan summa (UZS)</label>
+                <InputNumber id="payed" v-model="sellProduct.payed" />
+            </span>
+            <span class="grid gap-2">
+                <label for="remaining">Qolgan summa (UZS)</label>
+                <InputNumber id="remaining" v-model="sellProduct.remaining" />
+            </span>
+            <span class="grid gap-2">
                 <label for="description">Tafsilot</label>
                 <Textarea id="productDescription" v-model="sellProduct.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
             </span>
@@ -83,7 +91,9 @@ const sellProduct = ref({
     buyyingPrice: product.buyyingPrice,
     phone: '',
     currency: 'UZS',
-    description: ''
+    description: '',
+    payed: '',
+    remaining: ''
 });
 
 const sellProductNote = ref({
@@ -93,6 +103,7 @@ const sellProductNote = ref({
 });
 
 const sellProductfunction = async () => {
+    console.log(sellProductNote.value);
     if (sellProduct.value.customer == '' || sellProduct.value.price == '' || sellProduct.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;
@@ -123,10 +134,17 @@ const sellProductfunction = async () => {
     }
 };
 
-watch(sellProduct, (newValue) => {
-    sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari ga ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov qilish vaqtingiz keldi!`;
-    sellProductNote.value.adminNote = `${newValue.customer} dan ${newValue.size} Kg ${product.name} uchun ${formatCurrency(newValue.price * newValue.size)} to'lov olish vaqti keldi`;
-}, { deep: true });
+watch(
+    sellProduct,
+    (newValue) => {
+        const total = newValue.price * newValue.size || 0;
+        const payed = Number(newValue.payed) || 0;
+        sellProduct.value.remaining = total - payed;
+        sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari dan ${formatCurrency(newValue.price * newValue.size)} lik ${newValue.size} Kg ${product.name} oldingiz! To'langan summa ${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
+        sellProductNote.value.adminNote = `${newValue.customer} ga ${newValue.size} Kg ${product.name} sotildi. Jami summa: ${formatCurrency(newValue.price * newValue.size)}, to'langan summa:${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
+    },
+    { deep: true }
+);
 </script>
 
 <style scoped>
