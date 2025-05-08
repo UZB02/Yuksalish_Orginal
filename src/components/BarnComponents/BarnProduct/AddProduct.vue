@@ -1,24 +1,3 @@
-<template>
-    <div class="grid grid-cols-1 gap-4">
-        <span class="grid  gap-2">
-            <label for="Name">Mahsulot nomi</label>
-            <InputText type="text" id="Name" v-model="product.name" />
-        </span>
-        <span class="grid  gap-2">
-            <label for="size">Miqdori (Kg)</label>
-            <InputNumber type="number" id="size" v-model="product.size" />
-        </span>
-        <span class="grid  gap-2">
-            <label for="price">Sotib olish narxi (UZS)</label>
-            <InputNumber type="number" id="price" v-model="product.buyyingPrice" />
-        </span>
-        <span class="grid  gap-2">
-            <label for="buyyingPrice">Sotish narxi (UZS)</label>
-            <InputNumber type="number" id="buyyingPrice" v-model="product.price" />
-        </span>
-        <Button @click="addProduct()" size="large" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
-    </div>
-</template>
 <script setup>
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
@@ -35,7 +14,6 @@ const product = ref({
     buyyingPrice: null,
     size: null
 });
-
 
 const addProduct = async () => {
     isloading.value = true;
@@ -72,7 +50,28 @@ function showSuccess() {
 }
 
 onMounted(() => {
-  product.value
+    product.value;
 });
 </script>
+<template>
+    <div class="grid grid-cols-1 gap-4">
+        <span class="grid gap-2">
+            <label for="Name">Mahsulot nomi</label>
+            <InputText type="text" id="Name" v-model="product.name" />
+        </span>
+        <span class="grid gap-2">
+            <label for="size">Miqdori (Kg)</label>
+            <InputNumber type="number" id="size" v-model="product.size" />
+        </span>
+        <span class="grid gap-2">
+            <label for="price">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="price" v-model="product.buyyingPrice" />
+        </span>
+        <span class="grid gap-2">
+            <label for="buyyingPrice">Sotish narxi (UZS)</label>
+            <InputNumber type="number" id="buyyingPrice" v-model="product.price" />
+        </span>
+        <Button @click="addProduct()" size="large" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
+    </div>
+</template>
 <style scoped></style>

@@ -1,3 +1,27 @@
+<script setup>
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import ProductIdTable from '../../components/BarnComponents/BarnProductIdTable.vue';
+import formatDateTime from '../../utils/DateTimeFormatter';
+import formatCurrency from '../../utils/PriceFormatter';
+const id = useRoute().params.id;
+const data = ref([]);
+
+const getProduct = async () => {
+    try {
+        const response = await axios.get(`/api/product/${id}`);
+        data.value = response.data;
+        // console.log(data.value);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(() => {
+    getProduct();
+});
+</script>
 <template>
     <div class="w-full grid grid-cols-2 shadow p-4 md:flex md:justify-between gap-5 flex-wrap mb-6 md:mt-2">
         <div>
@@ -35,34 +59,10 @@
             </h6>
         </div>
     </div>
-    <ProductIdTable :data="data" @getProduct="getProduct"/>
+    <ProductIdTable :data="data" @getProduct="getProduct" />
 </template>
-<script setup>
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import ProductIdTable from '../../components/BarnComponents/BarnProductIdTable.vue';
-import formatDateTime from '../../utils/DateTimeFormatter';
-import formatCurrency from '../../utils/PriceFormatter';
-const id = useRoute().params.id;
-const data = ref([]);
-
-const getProduct = async () => {
-    try {
-        const response = await axios.get(`/api/product/${id}`);
-        data.value = response.data;
-        // console.log(data.value);
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-onMounted(() => {
-    getProduct();
-});
-</script>
 <style scoped>
-h6{
+h6 {
     padding: 0;
     margin: 0;
 }
