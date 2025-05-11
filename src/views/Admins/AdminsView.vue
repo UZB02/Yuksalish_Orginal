@@ -10,27 +10,65 @@
             </Button>
         </div>
 
-        <div v-if="isLoading">Yuklanmoqda...</div>
+        <div v-if="isLoading">
+            <!--Begin Table Skeleton -->
+            <DataTable :value="Array(5)" tableStyle="min-width: 50rem">
+                <Column header="ID">
+                    <template #body>
+                        <Skeleton width="2rem" />
+                    </template>
+                </Column>
+                <Column header="Ism">
+                    <template #body>
+                        <Skeleton width="6rem" />
+                    </template>
+                </Column>
+                <Column header="Familiya">
+                    <template #body>
+                        <Skeleton width="6rem" />
+                    </template>
+                </Column>
+                <Column header="Tell">
+                    <template #body>
+                        <Skeleton width="8rem" />
+                    </template>
+                </Column>
+                <Column header="Email">
+                    <template #body>
+                        <Skeleton width="10rem" />
+                    </template>
+                </Column>
+                <Column header="Amallar">
+                    <template #body>
+                        <div class="flex gap-2">
+                            <Skeleton shape="circle" size="2rem" />
+                            <Skeleton shape="circle" size="2rem" />
+                        </div>
+                    </template>
+                </Column>
+            </DataTable>
+            <!--End Table Skeleton -->
+        </div>
         <div v-else>
             <AdminsTable :data="data" @getAdmins="getAdmins" />
         </div>
     </div>
     <!-- Begin AddAdmin modal -->
-     <Drawer v-model:visible="visibleAddAdmin" header="Admin qo'shish" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
+    <Drawer v-model:visible="visibleAddAdmin" header="Admin qo'shish" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <AddAdmin @refreshFunction="refreshFunction"></AddAdmin>
     </Drawer>
     <!-- End AddAdmin modal -->
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import AdminsTable from '@/components/AdminsComponents/AdminsTable.vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 import AddAdmin from './../../components/AdminsComponents/AddAdmin.vue';
 
 const data = ref([]);
 const isLoading = ref(true);
-const visibleAddAdmin=ref(false)
+const visibleAddAdmin = ref(false);
 
 const getAdmins = async () => {
     try {
@@ -45,10 +83,10 @@ const getAdmins = async () => {
     }
 };
 
-const refreshFunction=()=>{
-    getAdmins()
-    visibleAddAdmin.value=false
-}
+const refreshFunction = () => {
+    getAdmins();
+    visibleAddAdmin.value = false;
+};
 
 onMounted(() => {
     getAdmins();
@@ -56,7 +94,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-h4{
+h4 {
     margin: 0;
 }
 /* Optional styles */
