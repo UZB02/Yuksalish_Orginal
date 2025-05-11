@@ -14,6 +14,11 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
+                    path: '/admins',
+                    name: 'Admins',
+                    component: () => import('../views/Admins/AdminsView.vue')
+                },
+                {
                     path: '/mix',
                     name: 'Mix',
                     component: () => import('../views/Mix/MixView.vue')

@@ -193,11 +193,9 @@ const updateMix = async () => {
         const res = await axios.put(`/api/mix/${mixId}`, {
             title: newProduct.value.title,
             description: newProduct.value.description,
-            price: newProduct.value.price,
-            basePrice: totalPrice.value,
+            sellingPrice: newProduct.value.price,
+            originalPrice: totalPrice.value,
             totalKg: totalSize.value,
-            stock: 20,
-            sold: 10,
             products: mappedProducts
         });
 

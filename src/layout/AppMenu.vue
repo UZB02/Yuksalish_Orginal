@@ -9,7 +9,8 @@ const model = ref([
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
             { label: 'Aralashma', icon: 'pi pi-fw pi-database', to: '/mix' },
-            { label: 'Ombor', icon: 'pi pi-fw pi-warehouse', to: '/barn' }
+            { label: 'Ombor', icon: 'pi pi-fw pi-warehouse', to: '/barn' },
+            { label: 'Adminlar', icon: 'pi pi-fw pi-users', to: '/admins' }
         ]
     },
     // {

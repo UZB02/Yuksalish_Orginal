@@ -24,7 +24,7 @@
                     <div class="flex flex-col md:items-center md:flex-row gap-2">
                         <span class="text-gray-400 text-sm">Narx:</span>
                         <span class="text-lg font-medium">
-                            {{ formatCurrency(item?.price) }}
+                            {{ formatCurrency(item?.sellingPrice) }}
                         </span>
                     </div>
                     <div class="flex flex-col items-end md:items-center md:flex-row justify-end gap-2">
@@ -251,7 +251,6 @@ const addMixByIdModalOpen = (item) => {
 const SellMixModalOpen = (item) => {
     visibleSellMix.value = true;
     mix.value = item;
-    console.log(item);
 };
 
 const refreshGetMixFunction = () => {

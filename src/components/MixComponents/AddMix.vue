@@ -199,11 +199,10 @@ const createNewMix = async () => {
         const res = await axios.post(`/api/mix`, {
             title: newProduct.value.title,
             description: newProduct.value.description,
-            price: newProduct.value.price,
-            basePrice: totalPrice.value,
+            sellingPrice: newProduct.value.price,
+            originalPrice: totalPrice.value,
             totalKg: totalSize.value,
-            stock: 20,
-            quantity: 10,
+            quantity: 0,
             products: mappedProducts
         });
         console.log(res);

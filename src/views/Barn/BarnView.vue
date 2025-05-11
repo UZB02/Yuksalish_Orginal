@@ -42,6 +42,7 @@ const getProduct = async () => {
             isloading.value = false;
             visibleAddProduct.value = false;
         }
+        console.log(data.value);
     } catch (error) {
         console.log(error);
     }

@@ -7,7 +7,7 @@
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(mix.basePrice * mix.totalKg) }}</h6>
+                <h6>{{ formatCurrency(mix.originalPrice * mix.totalKg) }}</h6>
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
                 <label>Jami:</label>
@@ -42,7 +42,7 @@ const props = defineProps({
 
 const mix = props.mix;
 const isloading = ref(false);
-const mixPrice = ref(mix.price || 0);
+const mixPrice = ref(mix.sellingPrice || 0);
 
 const MakeMixById = async () => {
     isloading.value = true;
@@ -62,7 +62,7 @@ const MakeMixById = async () => {
 };
 
 const profit = computed(() => {
-    return mixPrice.value * mix.totalKg - mix.basePrice * mix.totalKg;
+    return mixPrice.value * mix.totalKg - mix.originalPrice * mix.totalKg;
 });
 </script>
 
