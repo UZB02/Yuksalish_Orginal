@@ -15,11 +15,11 @@
                 </span>
                 <span class="grid gap-2">
                     <label for="basePrice">Tayyorlash narxi</label>
-                    <InputNumber id="basePrice" v-model="totalPrice" size="large" class="w-full" disabled />
+                    <InputNumber id="basePrice" v-model="minPrice" size="large" suffix=" UZS" class="w-full" disabled />
                 </span>
                 <span class="grid gap-2">
                     <label for="price">Sotish narxi</label>
-                    <InputNumber id="price" v-model="newProduct.price" size="large" class="w-full" />
+                    <InputNumber id="price" v-model="newProduct.sellingPrice" size="large" suffix=" UZS" class="w-full" />
                 </span>
                 <span class="grid gap-2">
                     <label for="description">Tafsilot</label>
@@ -43,6 +43,7 @@
                             <template #body="{ data }">
                                 {{ newProduct.composition.indexOf(data) + 1 }}
                             </template>
+                            <template #footer><strong>Jami:</strong></template>
                         </Column>
                         <Column field="name" header="Qo'shilgan mahsulotlar" />
                         <Column header="Hajmi">
@@ -52,9 +53,11 @@
                                     <span>Kg</span>
                                 </div>
                             </template>
+                                   <template #footer><strong>{{ totalSize }} Kg</strong></template>
                         </Column>
                         <Column header="Narx">
                             <template #body="{ data }"> {{ formatCurrency(data.buyyingPrice * data.kg) }} </template>
+                            <template #footer><strong>{{ formatCurrency(minPrice * totalSize) }}</strong></template>
                         </Column>
                         <Column header="Amallar">
                             <template #body="{ data }">
@@ -99,13 +102,13 @@ const products = ref([]);
 const product = ref(null);
 const changeAmount = ref(null);
 const changedProduct = ref(null);
-const mixTitle = ref('');
 const isloading = ref(false);
 
 const newProduct = ref({
     title: '',
     description: '',
     price: 0,
+    sellingPrice:'',
     composition: []
 });
 
@@ -122,11 +125,11 @@ const getMixById = async () => {
     try {
         const res = await axios.get(`/api/mix/${mixId}`);
         mix.value = res.data;
-
+        console.log(mix.value);
         newProduct.value = {
             title: res.data.title,
             description: res.data.description,
-            price: res.data.price,
+            sellingPrice: res.data.sellingPrice,
             composition: res.data.products.map((p) => ({
                 id: p.product._id,
                 name: p.product.name,
@@ -177,8 +180,11 @@ const totalSize = computed(() => {
     return newProduct.value.composition.reduce((sum, item) => sum + Number(item.kg || 0), 0);
 });
 
-const totalPrice = computed(() => {
-    return newProduct.value.composition.reduce((sum, item) => sum + item.buyyingPrice, 0);
+const minPrice = computed(() => {
+    const total = newProduct.value.composition.reduce((sum, item) => {
+        return sum + Number(item.buyyingPrice || 0) * Number(item.kg || 0);
+    }, 0);
+    return totalSize.value > 0 ? total / totalSize.value : 0;
 });
 
 const updateMix = async () => {
@@ -194,7 +200,7 @@ const updateMix = async () => {
             title: newProduct.value.title,
             description: newProduct.value.description,
             sellingPrice: newProduct.value.price,
-            originalPrice: totalPrice.value,
+            originalPrice: minPrice.value,
             totalKg: totalSize.value,
             products: mappedProducts
         });

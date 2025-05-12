@@ -17,8 +17,8 @@
                 <InputText id="fullName" v-model="sellMix.fullName" placeholder="Xaridor Ismini Kiriting" />
             </span>
             <span class="grid gap-2">
-                <label for="phoneNumber">Xaridor Raqami <span class="text-red-500">*</span></label>
-                <InputMask id="phoneNumber" v-model="sellMix.phoneNumber" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
+                <label for="clientPhoneNumber">Xaridor Raqami <span class="text-red-500">*</span></label>
+                <InputMask id="clientPhoneNumber" v-model="sellMix.clientPhoneNumber" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
             </span>
             <span class="grid gap-2">
                 <label for="mixSize">Mahsulot Hajmi (Kg) <span class="text-red-500">*</span></label>
@@ -83,6 +83,8 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref, watch } from 'vue';
+import { useAuthStore } from '@/stores/useAuthStore.js';
+const authStore = useAuthStore();
 const toast = useToast();
 
 const emits = defineEmits(['refreshGetMixFunction']);
@@ -101,10 +103,13 @@ const sellMix = ref({
     size: null,
     sellingPrice: mix.price,
     originalPrice: mix.basePrice,
-    phoneNumber: '',
+    clientPhoneNumber: '',
+    sellerPhoneNumber:authStore.user.phoneNumber,
     description: '',
     payed: '',
-    remaining: ''
+    remaining: '',
+    // profit:'',
+    // totalAmount:''
     // currency: 'UZS',
 });
 
@@ -132,7 +137,8 @@ const sellmixfunction = async () => {
             size: sellMix.value.size,
             sellingPrice: sellMix.value.sellingPrice,
             originalPrice: sellMix.value.originalPrice,
-            phoneNumber: sellMix.value.phoneNumber,
+            clientPhoneNumber: sellMix.value.clientPhoneNumber,
+            sellerPhoneNumber:sellMix.value.sellerPhoneNumber,
             description: sellMix.value.description,
             payed: sellMix.value.payed
             // currency: sellMix.value.currency,

@@ -94,25 +94,28 @@
     <Dialog v-model:visible="visibleInfo" position="top" modal :header="mix.title" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div>
             <div>
-                <h6>Tarkibi</h6>
-            </div>
-            <div>
                 <DataTable :value="mix.products" tableStyle="min-width: 40rem">
-                    <Column field="product.name" header="Nomi"></Column>
+                    <Column field="product.name" header="Nomi">
+                    <template #footer><strong>Jami:</strong></template>
+                    </Column>
                     <Column field="kg" header="Hajmi">
                         <template #body="{ data }"> {{ data.kg }} Kg </template>
+                           <template #footer><strong>{{ totalSize }} Kg</strong></template>
                     </Column>
                     <Column header="Narx">
                         <template #body="{ data }">
                             {{ formatCurrency(data.product.buyyingPrice) }}
                         </template>
+                        <template #footer><strong>{{ formatCurrency(totalProductPrice) }}</strong></template>
                     </Column>
                     <Column header="Ja'mi summa">
                         <template #body="{ data }">
                             {{ formatCurrency(data.product.buyyingPrice * data.kg) }}
                         </template>
+                        <template #footer><strong>{{ formatCurrency(totalKgPrice) }}</strong></template>
                     </Column>
                 </DataTable>
+                <p class="mt-5 block">Tayyorlanish narxi: <strong>{{ formatCurrency(minPrice) }}</strong></p>
             </div>
         </div>
     </Dialog>
@@ -124,7 +127,7 @@ import formatNumber from '@/utils/NumberFormatter';
 import formatCurrency from '@/utils/PriceFormatter';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { defineEmits, defineProps, ref } from 'vue';
+import { defineEmits, defineProps, ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; // Routerni import qilish
 import MakeMixById from './MakeMixById.vue';
 import SellMix from './SellMix.vue';
@@ -263,4 +266,22 @@ const infoModal = (item) => {
     mix.value = item;
     visibleInfo.value = true;
 };
+
+const totalSize = computed(() => {
+    return mix.value.products.reduce((sum, item) => sum + Number(item.kg || 0), 0);
+});
+const totalProductPrice = computed(() => {
+    return mix.value.products.reduce((sum, item) => sum + Number(item.product.buyyingPrice || 0), 0);
+});
+const totalKgPrice = computed(() => {
+    return mix.value.products.reduce((sum, item) => sum + Number(item.product.buyyingPrice || 0) * Number(item.kg || 0), 0);
+});
+
+
+const minPrice = computed(() => {
+    const total = mix.value.products.reduce((sum, item) => {
+        return sum + Number(item.product.buyyingPrice || 0) * Number(item.kg || 0);
+    }, 0);
+    return totalSize.value > 0 ? total / totalSize.value : 0;
+});
 </script>

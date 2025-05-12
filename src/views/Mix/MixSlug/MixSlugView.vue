@@ -13,19 +13,19 @@
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg narx</p>
             <h6>
-                {{ data.basePrice ? formatCurrency(Number(data?.basePrice)) : 'Loading...' }}
+                {{ data.originalPrice ? formatCurrency(Number(data?.originalPrice)) : 'Loading...' }}
             </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg Sotish narxi</p>
             <h6>
-                {{ data.price ? formatCurrency(Number(data?.price)) : 'Loading...' }}
+                {{ data.sellingPrice ? formatCurrency(Number(data?.sellingPrice)) : 'Loading...' }}
             </h6>
         </div>
         <div>
             <p class="text-xs uppercase text-gray-400">Jami Summa</p>
             <h6>
-                {{ data.totalKg ? formatCurrency(Number(data?.totalKg) * Number(data?.price)) : 'Loading...' }}
+                {{ data.totalKg ? formatCurrency(Number(data?.totalKg) * Number(data?.sellingPrice)) : 'Loading...' }}
             </h6>
         </div>
         <div>

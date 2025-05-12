@@ -15,11 +15,11 @@
                 </span>
                 <span class="grid gap-2">
                     <label for="price">Tayyorlash narxi <span class="text-red-500">*</span></label>
-                    <InputNumber id="price" v-model="totalPrice" size="large" class="w-full" />
+                    <InputNumber id="price" v-model="minPrice" size="large" disabled suffix=" UZS" class="w-full" />
                 </span>
                 <span class="grid gap-2">
                     <label for="price">Sotish narxi <span class="text-red-500">*</span></label>
-                    <InputNumber id="price" v-model="newProduct.price" size="large" class="w-full" />
+                    <InputNumber id="price" v-model="newProduct.price" size="large" suffix=" UZS" class="w-full" />
                 </span>
                 <span class="grid gap-2">
                     <label for="description">Tafsilot <span class="text-red-500">*</span></label>
@@ -169,7 +169,7 @@ const loadSavedProduct = () => {
             title: savedData.title || '',
             totalKg: totalSize,
             price: savedData.price,
-            basePrice: totalPrice,
+            basePrice: minPrice,
             description: savedData.description,
             composition: savedData.composition || []
         };
@@ -177,15 +177,16 @@ const loadSavedProduct = () => {
 };
 
 const totalSize = computed(() => {
-    return newProduct.value.composition.reduce((sum, item) => {
-        return sum + Number(item.kg || 0);
-    }, 0);
+   return newProduct.value.composition.reduce((sum, item) => sum + Number(item.kg || 0), 0);
 });
-const totalPrice = computed(() => {
-    return newProduct.value.composition.reduce((sum, item) => {
-        return sum + Number(item.buyyingPrice || 0);
+
+const minPrice = computed(() => {
+    const total = newProduct.value.composition.reduce((sum, item) => {
+        return sum + Number(item.buyyingPrice || 0) * Number(item.kg || 0);
     }, 0);
+    return totalSize.value > 0 ? total / totalSize.value : 0;
 });
+
 
 const createNewMix = async () => {
     console.log('Yangi mahsulot:', newProduct.value);
@@ -200,7 +201,7 @@ const createNewMix = async () => {
             title: newProduct.value.title,
             description: newProduct.value.description,
             sellingPrice: newProduct.value.price,
-            originalPrice: totalPrice.value,
+            originalPrice: minPrice.value,
             totalKg: totalSize.value,
             quantity: 0,
             products: mappedProducts
@@ -217,4 +218,5 @@ const createNewMix = async () => {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: error.response.data.message, life: 3000 });
     }
 };
+
 </script>

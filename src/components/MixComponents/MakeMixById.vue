@@ -2,26 +2,18 @@
     <section class="grid grid-cols-1 gap-6">
         <div class="grid grid-cols-2 gap-3">
             <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
-                <label>Hajmi:</label>
-                <h6>{{ mix.totalKg }} Kg</h6>
+                <label>Mahsulot miqdori:</label>
+                <h6>{{ totalSize }} Kg</h6>
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
-                <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(mix.originalPrice * mix.totalKg) }}</h6>
-            </span>
-            <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
-                <label>Jami:</label>
-                <h6>{{ formatCurrency(mixPrice * mix.totalKg) }}</h6>
-            </span>
-            <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
-                <label>Ko'zlangan foyda:</label>
-                <h6>{{ formatCurrency(profit) }}</h6>
+                <label>Tayyorlanish narxi:</label>
+                <h6>{{ formatCurrency(minPrice) }}</h6>
             </span>
         </div>
         <div class="grid grid-cols-1 gap-4">
             <span class="grid gap-2">
                 <label for="price">Sotish narxi (UZS)</label>
-                <InputNumber v-model="mixPrice" inputId="price" size="large"  />
+                <InputNumber v-model="mixPrice" inputId="price" suffix=" UZS" size="large"  />
             </span>
             <Button @click="MakeMixById" size="large" :label="isloading ? 'Loading...' : 'Tayyorlash'" :disabled="isloading" />
         </div>
@@ -61,8 +53,16 @@ const MakeMixById = async () => {
     }
 };
 
-const profit = computed(() => {
-    return mixPrice.value * mix.totalKg - mix.originalPrice * mix.totalKg;
+
+const totalSize = computed(() => {
+    return mix.products.reduce((sum, item) => sum + Number(item.kg || 0), 0);
+});
+
+const minPrice = computed(() => {
+    const total = mix.products.reduce((sum, item) => {
+        return sum + Number(item.product.buyyingPrice || 0) * Number(item.kg || 0);
+    }, 0);
+    return totalSize.value > 0 ? total / totalSize.value : 0;
 });
 </script>
 
