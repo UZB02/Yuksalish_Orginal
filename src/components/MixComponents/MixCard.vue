@@ -38,7 +38,7 @@
             <div class="grid grid-cols-12 gap-2 border-t-2 dark:border-gray-600 pt-2">
                 <div class="col-span-11 grid grid-cols-2 gap-2">
                     <Button @click="addMixByIdModalOpen(item)" type="button" label="Tayyorlash" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
-                    <Button @click="SellMixModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                    <Button @click="SellMixModalOpen(item)" :disabled="item.quantity==0" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
                 </div>
 
                 <Button @click="router.push(`/mix/${item._id}`)" type="button" icon="pi pi-arrow-right" class="w-full" />
@@ -185,13 +185,13 @@ const overlayMenuItems = ref([
     //         visibleInfo.value = true;
     //     }
     // },
-    {
-        label: 'Batafsil',
-        icon: 'pi pi-eye',
-        command: () => {
-            router.push(`/barn/product/${mix.value._id}`);
-        }
-    },
+    // {
+    //     label: 'Batafsil',
+    //     icon: 'pi pi-eye',
+    //     command: () => {
+    //         router.push(`/barn/product/${mix.value._id}`);
+    //     }
+    // },
     {
         label: 'Taxrirlash',
         icon: 'pi pi-refresh',

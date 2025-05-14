@@ -11,7 +11,7 @@
             <h6>{{ data.totalKg ? data.totalKg : 'Loading...' }} kg</h6>
         </div>
         <div>
-            <p class="text-xs uppercase text-gray-400">1 kg narx</p>
+            <p class="text-xs uppercase text-gray-400">1 kg tannarx</p>
             <h6>
                 {{ data.originalPrice ? formatCurrency(Number(data?.originalPrice)) : 'Loading...' }}
             </h6>

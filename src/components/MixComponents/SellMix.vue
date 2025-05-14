@@ -7,7 +7,7 @@
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(mix.basePrice) }}</h6>
+                <h6>{{ formatCurrency(mix.originalPrice) }}</h6>
             </span>
         </div>
 
@@ -25,7 +25,7 @@
                 <InputNumber id="mixSize" v-model="sellMix.size" />
             </span>
             <span class="grid gap-2">
-                <label for="sellingPrice">Sotish narxi (UZS) <span class="text-red-500">*</span></label>
+                <label for="sellingPrice" class="flex gap-2">Sotish narxi (UZS) <span class="text-red-500">*</span><span>Tannarxi: {{formatCurrency(mix.originalPrice)}}</span></label>
                 <InputNumber id="sellingPrice" v-model="sellMix.sellingPrice" />
                 <small v-if="sellMix.sellingPrice < sellMix.originalPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>

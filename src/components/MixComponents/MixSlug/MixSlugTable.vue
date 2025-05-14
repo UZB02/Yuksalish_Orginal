@@ -39,13 +39,13 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellmixModalOpen(mix.data)" class="flex items-center gap-2">
+                        <Button @click="SellmixModalOpen(mix.data)" :disabled="mix.data.quantity==0" class="flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
                         <Button v-tooltip.top="'Excelga yuklash'" severity="secondary"
                             @click="mixhistoryexportToExcelById(mixHistory.history, mix.data.title)"
-                            class="flex items-center gap-2">
+                            class="flex items-center gap-2" :disabled="mixHistory==null">
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>
                         </Button>
@@ -59,11 +59,11 @@
             </template>
 
             <Column field="fullName" header="Haridor"></Column>
-            <Column field="phoneNumber" header="Tell">
+            <Column field="clientPhoneNumber" header="Tell">
                 <template #body="slotProps">
-                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.phoneNumber"
+                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.clientPhoneNumber"
                         class="text-blue-800 hover:underline dark:text-white">
-                        {{ slotProps.data.phoneNumber }}
+                        {{ slotProps.data.clientPhoneNumber }}
                     </a>
                 </template>
             </Column>
@@ -190,6 +190,7 @@ const getMixHistoryById = async () => {
             loadingmix.value = false;
             mixHistory.value = response.data;
             totalItems.value = response.data.total;
+            console.log(mixHistory.value);
         }
     } catch (error) {
         console.error(error);

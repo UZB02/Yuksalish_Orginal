@@ -32,9 +32,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <Button @click="SellProductModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
-                    <Button @click="addProductByIdModalOpen(item)" type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
+                <div class="grid grid-cols-12 gap-2 dark:border-gray-600 pt-2">
+                    <div class="col-span-11 grid grid-cols-2 gap-2">
+                        <Button @click="SellProductModalOpen(item)" type="button" label="Sotish" icon="pi pi-cart-minus" style="width: auto" />
+                        <Button @click="addProductByIdModalOpen(item)" type="button" label="Qo'shish" icon="pi pi-cart-arrow-down" severity="secondary" style="width: auto" />
+                    </div>
+                     <Button @click="router.push(`/barn/product/${item._id}`)" type="button" icon="pi pi-arrow-right" class="w-full" />
                 </div>
             </div>
         </template>
@@ -141,13 +144,13 @@ function closeDeletModal() {
     deletModal.value = false;
 }
 const overlayMenuItems = ref([
-    {
-        label: 'Batafsil',
-        icon: 'pi pi-eye',
-        command: () => {
-            router.push(`/barn/product/${product.value._id}`);
-        }
-    },
+    // {
+    //     label: 'Batafsil',
+    //     icon: 'pi pi-eye',
+    //     command: () => {
+    //         router.push(`/barn/product/${product.value._id}`);
+    //     }
+    // },
     {
         label: 'Taxrirlash',
         icon: 'pi pi-refresh',
