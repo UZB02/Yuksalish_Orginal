@@ -5,12 +5,14 @@ import { ref } from 'vue';
 import Logo from '../../public/Logo.vue';
 import AppConfigurator from './AppConfigurator.vue';
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
-const date = ref(null); // Tanlangan sana
+const visible = ref(false);
 
 const authStore = useAuthStore();
 const logout = () => {
     authStore.logout();
+    visible.value=false
 };
+console.log(authStore.user);
 </script>
 
 <template>
@@ -51,7 +53,14 @@ const logout = () => {
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button @click="logout" type="button" class="layout-topbar-action">
+                    <!-- <div class="flex gap-2 items-center">
+                        <i class="pi pi-user"></i>
+                        <div class="flex flex-col">
+                            <span>{{authStore.user.firstName+ ' ' + authStore.user.lastName}}</span>
+                        <span>{{authStore.user.email}}</span>
+                        </div>
+                    </div> -->
+                    <button @click="visible=true" type="button" class="layout-topbar-action">
                         <i class="pi pi-sign-out" style="font-size: 15px"></i>
                         <span>Tizimdan chiqish</span>
                     </button>
@@ -59,4 +68,36 @@ const logout = () => {
             </div>
         </div>
     </div>
+
+    <!-- Begin view logout -->
+  <Dialog
+  v-model:visible="visible"
+  modal
+  header="Chiqish"
+  :style="{ width: '30vw' }"
+  :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+>
+  <div class="text-center p-4">
+    <i class="pi pi-exclamation-triangle text-red-500 mb-4" style="font-size: 3rem;"></i>
+    <h2 class="text-xl font-semibold mb-2">Chiqmoqchimisiz?</h2>
+    <p class="text-gray-600 mb-4">Hisobingizdan chiqishni xohlaysizmi?</p>
+
+    <div class="grid grid-cols-2 gap-3 mt-4">
+      <Button
+        label="Bekor qilish"
+        icon="pi pi-times"
+        class="p-button-secondary"
+        @click="visible = false"
+      />
+      <Button
+        label="Chiqish"
+        icon="pi pi-sign-out"
+        class="p-button-danger"
+        @click="logout()"
+      />
+    </div>
+  </div>
+</Dialog>
+
+    <!-- End view logout -->
 </template>
