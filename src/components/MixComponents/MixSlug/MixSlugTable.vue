@@ -39,7 +39,7 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellmixModalOpen(mix.data)" :disabled="mix.data.quantity==0" class="flex items-center gap-2">
+                        <Button @click="SellmixModalOpen(mix.data)" :disabled="mix.data.quantity==0 || mix.data.totalKg==0" class="flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>

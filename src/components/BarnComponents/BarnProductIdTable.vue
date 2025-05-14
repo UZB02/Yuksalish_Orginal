@@ -102,11 +102,13 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellProductModalOpen(product.data)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button @click="SellProductModalOpen(product.data)" :disabled="product.data.size==0" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
-                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2"
+                        :disabled="productHistory===null"
+                        >
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>
                         </Button>
