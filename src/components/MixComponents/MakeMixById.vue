@@ -61,7 +61,7 @@ const totalSize = computed(() => {
 
 const minPrice = computed(() => {
     const total = mix.products.reduce((sum, item) => {
-        return sum + Number(item.product.buyyingPrice || 0) * Number(item.kg || 0);
+        return sum + Number(item.product.costPrice || 0) * Number(item.kg || 0);
     }, 0);
     return totalSize.value > 0 ? total / totalSize.value : 0;
 });
