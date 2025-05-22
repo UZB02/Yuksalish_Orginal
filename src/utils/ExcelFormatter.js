@@ -8,15 +8,15 @@ const exportToExcel = (history, name) => {
     // Map the data to include only the required fields
     const filteredData = history.map((item) => ({
         Haridor: item.name,
-        Tell: item.phone,
+        Tell: item.clientPhoneNumber,
         Hajm: item.size + ' ' + 'Kg',
         'Sotilish Narxi': formatCurrency(item.sellingPrice),
-        'Tannarxi': formatCurrency(item.originalPrice),
-        'Jami Qiymat': formatCurrency(item.totalAmount),
+        Tannarxi: formatCurrency(item.costPrice),
+        'Jami Qiymat': formatCurrency(item.totalPrice),
         Foyda: formatCurrency(item.profit),
         Valyuta: item.currency,
         Tafsilot: item.description,
-        'Sotilgan Sana': formatDateTime(item.createdAt), // Assuming formatDateTime is a function that formats the date
+        'Sotilgan Sana': formatDateTime(item.createdAt) // Assuming formatDateTime is a function that formats the date
         // 'Yangilangan Sana': formatDateTime(item.updatedAt) // Assuming formatDateTime is a function that formats the date
     }));
 

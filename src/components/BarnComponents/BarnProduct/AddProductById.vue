@@ -16,12 +16,12 @@
             <InputNumber type="number" id="size" v-model="productSize" />
         </span>
           <span class="grid  gap-2">
-            <label for="buyyingprice">Sotib olish narxi (UZS)</label>
-            <InputNumber type="number" id="buyyingprice" v-model="productBuyyingPrice" />
+            <label for="buyyingPrice">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="buyyingPrice" v-model="costPrice" />
         </span>
           <span class="grid  gap-2">
-            <label for="price">Sotish narxi (UZS)</label>
-            <InputNumber type="number" id="price" v-model="productPrice" />
+            <label for="sellingPrice">Sotish narxi (UZS)</label>
+            <InputNumber type="number" id="sellingPrice" v-model="productPrice" />
         </span>
           <Button @click="addProductById()" size="large" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
         </div>
@@ -31,29 +31,32 @@
 import axios from 'axios';
 import { defineEmits, defineProps, ref } from 'vue';
 import formatCurrency from '@/utils/PriceFormatter';
+import { useToast } from 'primevue/usetoast';
 
 const emits = defineEmits(['refreshGetProductFunction']);
 const props = defineProps({
     product: { type: Object }
 });
 
+const toast = useToast();
 const product = ref(props.product);
 const isloading = ref(false);
 const productSize = ref(0);
-const productPrice = ref(product.value.price);
-const productBuyyingPrice = ref(product.value.buyyingPrice);
+const productPrice = ref(product.value.sellingPrice);
+const costPrice = ref(product.value.costPrice);
 
 const addProductById = async () => {
     isloading.value = true;
     try {
         const res = await axios.put(`/api/product/size/${product.value._id}`, {
             size: productSize.value,
-            price: productPrice.value,
-            buyyingPrice: productBuyyingPrice.value
+            sellingPrice: productPrice.value,
+            costPrice: costPrice.value
         });
         if (res.status == 200) {
           isloading.value = false;
-            emits('refreshGetProductFunction');
+          emits('refreshGetProductFunction');
+          toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Taxrirlandi', life: 3000 });
         }
     } catch (error) {
       isloading.value = false;

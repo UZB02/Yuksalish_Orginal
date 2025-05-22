@@ -9,12 +9,12 @@
             <InputNumber type="number" id="size" v-model="product.size" />
         </span>
         <span class="grid  gap-2">
-            <label for="price">Sotib olish narxi (UZS)</label>
-            <InputNumber type="number" id="price" v-model="product.buyyingPrice" />
+            <label for="costPrice">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="costPrice" v-model="product.costPrice" />
         </span>
         <span class="grid  gap-2">
-            <label for="buyyingPrice">Sotish narxi (UZS)</label>
-            <InputNumber type="number" id="buyyingPrice" v-model="product.price" />
+            <label for="sellingPrice">Sotish narxi (UZS)</label>
+            <InputNumber type="number" id="sellingPrice" v-model="product.sellingPrice" />
         </span>
         <Button @click="addProduct()" size="large" :label="isloading ? 'Loading...' : 'Qo\'shish'"></Button>
     </div>
@@ -30,9 +30,9 @@ const emits = defineEmits(['getProduct']);
 
 const product = ref({
     name: '',
-    price: null,
+    sellingPrice: null,
     currency: 'UZS',
-    buyyingPrice: null,
+    costPrice: null,
     size: null
 });
 
@@ -40,7 +40,7 @@ const product = ref({
 const addProduct = async () => {
     isloading.value = true;
     try {
-        if (!product.value.name || !product.value.price || !product.value.buyyingPrice || !product.value.size) {
+        if (!product.value.name || !product.value.sellingPrice || !product.value.costPrice || !product.value.size) {
             toast.add({ severity: 'error', summary: 'Xatolik', detail: '⚠️ Iltimos, barcha maydonlarni to‘ldiring!', life: 3000 });
             isloading.value = false;
             return;
@@ -51,9 +51,9 @@ const addProduct = async () => {
         if (res.status === 201) {
             product.value = {
                 name: '',
-                price: null,
+                sellingPrice: null,
                 currency: 'UZS',
-                buyyingPrice: null,
+                costPrice: null,
                 size: null
             };
             isloading.value = false;

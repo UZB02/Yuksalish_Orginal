@@ -52,10 +52,10 @@
         <!--End Skeleton loading table -->
         <DataTable v-else ref="tableRef" :value="productHistory?.history ? productHistory?.history : []" scrollable tableStyle="min-width: 1800px">
             <Column field="name" header="Haridor"></Column>
-            <Column field="phone" header="Tell">
+            <Column field="clientPhoneNumber" header="Tell">
                 <template #body="slotProps">
-                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.phone" class="text-blue-800 hover:underline dark:text-white">
-                        {{ slotProps.data.phone }}
+                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.clientPhoneNumber" class="text-blue-800 hover:underline dark:text-white">
+                        {{ slotProps.data.clientPhoneNumber }}
                     </a>
                 </template>
             </Column>
@@ -67,14 +67,14 @@
                     {{ formatCurrency(slotProps.data.sellingPrice) }}
                 </template>
             </Column>
-            <Column field="originalPrice" header="Tannarxi">
+            <Column field="costPrice" header="Tannarxi">
                 <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.originalPrice) }}
+                    {{ formatCurrency(slotProps.data.costPrice) }}
                 </template>
             </Column>
-            <Column field="totalAmount" header="Tushkan Summa">
+            <Column field="totalPrice" header="Tushkan Summa">
                 <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.totalAmount) }}
+                    {{ formatCurrency(slotProps.data.totalPrice) }}
                 </template>
             </Column>
             <Column field="profit" header="Foyda">
@@ -199,7 +199,6 @@ const getProductHistory = async () => {
             year = date.value.getFullYear(); // 2025
             dateParam = `&day=${day}&month=${month}&year=${year}`;
         }
-        console.log(dateParam);
         const response = await axios.get(`/api/product-history/${id}?page=${page.value}&limit=${limit.value}${dateParam}`);
         if ((response.status = 200)) {
             loadingProduct.value = false;

@@ -7,7 +7,7 @@
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(product.buyyingPrice) }}</h6>
+                <h6>{{ formatCurrency(product.costPrice) }}</h6>
             </span>
         </div>
 
@@ -18,16 +18,16 @@
             </span>
             <span class="grid gap-2">
                 <label for="phone">Xaridor Raqami</label>
-                <InputMask id="phone" v-model="sellProduct.phone" mask="+999(99) 999-99-99" placeholder="+998(91) 999-99-99" class="w-full" />
+                <InputMask id="phone" v-model="sellProduct.phone" mask="+999999999999" placeholder="+998(91) 999-99-99" class="w-full" />
             </span>
             <span class="grid gap-2">
                 <label for="productSize">Mahsulot Hajmi (Kg)</label>
                 <InputNumber id="productSize" v-model="sellProduct.size" />
             </span>
             <span class="grid gap-2">
-                <label for="price">Sotish narxi (UZS)</label>
-                <InputNumber id="price" v-model="sellProduct.price" />
-                <small v-if="sellProduct.price < sellProduct.buyyingPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
+                <label for="sellingPrice">Sotish narxi (UZS)</label>
+                <InputNumber id="sellingPrice" v-model="sellProduct.sellingPrice" />
+                <small v-if="sellProduct.sellingPrice < sellProduct.costPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
                 <label for="payed">To'langan summa (UZS)</label>
@@ -64,6 +64,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore.js';
 import formatCurrency from '@/utils/PriceFormatter';
 import axios from 'axios';
 import InputMask from 'primevue/inputmask';
@@ -73,6 +74,7 @@ import Textarea from 'primevue/textarea';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref, watch } from 'vue';
 const toast = useToast();
+const authStore = useAuthStore();
 
 const emits = defineEmits(['refreshGetProductFunction']);
 const props = defineProps({
@@ -87,24 +89,26 @@ const sellProduct = ref({
     customer: '',
     productId: product._id,
     size: null,
-    price: product.price,
-    buyyingPrice: product.buyyingPrice,
+    sellingPrice: product.sellingPrice,
+    costPrice: product.costPrice,
     phone: '',
     currency: 'UZS',
     description: '',
     payed: '',
-    remaining: ''
+    remaining: '',
+    sellerPhoneNumber: authStore.user.phoneNumber
 });
 
 const sellProductNote = ref({
     buyyerNote: '',
     adminNote: '',
-    timeNote: ''
+    timeNote: '',
+    timestamp:null
 });
 
 const sellProductfunction = async () => {
-    console.log(sellProductNote.value);
-    if (sellProduct.value.customer == '' || sellProduct.value.price == '' || sellProduct.value.size == null) {
+    console.log(sellProduct.value);
+    if (sellProduct.value.customer == '' || sellProduct.value.sellingPrice == '' || sellProduct.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;
     }
@@ -114,15 +118,22 @@ const sellProductfunction = async () => {
             name: sellProduct.value.customer,
             productId: sellProduct.value.productId,
             size: sellProduct.value.size,
-            sellingPrice: sellProduct.value.price,
-            originalPrice: sellProduct.value.buyyingPrice,
-            phone: sellProduct.value.phone,
+            sellingPrice: sellProduct.value.sellingPrice,
+            costPrice: sellProduct.value.costPrice,
+            clientPhoneNumber: sellProduct.value.phone,
+            sellerPhoneNumber: sellProduct.value.sellerPhoneNumber,
             currency: sellProduct.value.currency,
             description: sellProduct.value.description,
-            totalAmount: sellProduct.value.price * sellProduct.value.size,
-            profit: sellProduct.value.price * sellProduct.value.size - sellProduct.value.buyyingPrice * sellProduct.value.size
+            totalPrice: sellProduct.value.sellingPrice * sellProduct.value.size,
+            profit: sellProduct.value.sellingPrice * sellProduct.value.size - sellProduct.value.costPrice * sellProduct.value.size,
+            reminder: {
+                time: sellProductNote.value.timestamp,
+                messageForBuyer: sellProductNote.value.buyyerNote,
+                messageForSeller: sellProductNote.value.adminNote
+            }
         });
         if (res.status === 201) {
+            console.log(res);
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Sotildi', life: 3000 });
             emits('refreshGetProductFunction');
         }
@@ -137,14 +148,23 @@ const sellProductfunction = async () => {
 watch(
     sellProduct,
     (newValue) => {
-        const total = newValue.price * newValue.size || 0;
+        const total = newValue.sellingPrice * newValue.size || 0;
         const payed = Number(newValue.payed) || 0;
         sellProduct.value.remaining = total - payed;
-        sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari dan ${formatCurrency(newValue.price * newValue.size)} lik ${newValue.size} Kg ${product.name} oldingiz! To'langan summa ${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
-        sellProductNote.value.adminNote = `${newValue.customer} ga ${newValue.size} Kg ${product.name} sotildi. Jami summa: ${formatCurrency(newValue.price * newValue.size)}, to'langan summa:${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
+        sellProductNote.value.buyyerNote = `Yuksalish Bedana yemlari dan ${formatCurrency(newValue.sellingPrice * newValue.size)} lik ${newValue.size} Kg ${product.name} oldingiz! To'langan summa ${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
+        sellProductNote.value.adminNote = `${newValue.customer} ga ${newValue.size} Kg ${product.name} sotildi. Jami summa: ${formatCurrency(newValue.sellingPrice * newValue.size)}, to'langan summa:${formatCurrency(newValue.payed)}, qolgan summa ${formatCurrency(newValue.remaining)}`;
     },
     { deep: true }
 );
+
+// `timeNote` o'zgarganida avtomatik timestampga o'tkazamiz
+watch(() => sellProductNote.value.timeNote, (newVal) => {
+  if (newVal instanceof Date) {
+    sellProductNote.value.timestamp = newVal.getTime()
+  } else {
+    sellProductNote.value.timestamp = null
+  }
+})
 </script>
 
 <style scoped>

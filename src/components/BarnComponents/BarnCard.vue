@@ -18,17 +18,17 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Jami Summa</p>
-                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(Number(item?.size) * Number(item?.price)) }}</p>
+                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(Number(item?.size) * Number(item?.sellingPrice)) }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">Sotib olish narxi</p>
-                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.buyyingPrice) }}</p>
+                            <p class="font-medium" style="line-height: 0">{{ formatCurrency(item?.costPrice) }}</p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-400">1-kg sotilish narxi</p>
-                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.price) }}</p>
+                            <p class="font-medium text-base" style="line-height: 0">{{ formatCurrency(item?.sellingPrice) }}</p>
                         </div>
                     </div>
                 </div>
@@ -66,12 +66,12 @@
                 <InputNumber type="number" id="size" v-model="editproduct.size" />
             </span>
             <span class="grid grid-cols-1 gap-2">
-                <label for="price">Sotib olish narxi</label>
-                <InputNumber type="number" id="price" v-model="editproduct.buyyingPrice" />
+                <label for="costPrice">Sotib olish narxi</label>
+                <InputNumber type="number" id="costPrice" v-model="editproduct.costPrice" />
             </span>
             <span class="grid grid-cols-1 gap-2">
-                <label for="buyyingPrice">Sotish narxi</label>
-                <InputNumber type="number" id="buyyingPrice" v-model="editproduct.price" />
+                <label for="costPrice">Sotish narxi</label>
+                <InputNumber type="number" id="costPrice" v-model="editproduct.sellingPrice" />
             </span>
             <Button @click="editProductById()" size="large" :label="isLoading ? 'Yuklanmoqda...' : 'Taxrirlash'"></Button>
         </div>
@@ -114,9 +114,9 @@ const isLoading = ref(false);
 const editproduct = ref({
     id: null,
     name: '',
-    price: '',
+    sellingPrice: '',
     currency: 'UZS',
-    buyyingPrice: '',
+    costPrice: '',
     size: ''
 });
 
@@ -126,8 +126,8 @@ const toggleMenu = (event, index, item) => {
     editproduct.value = {
         id: item._id,
         name: item.name,
-        price: item.price,
-        buyyingPrice: item.buyyingPrice,
+        sellingPrice: item.sellingPrice,
+        costPrice: item.costPrice,
         size: item.size
     };
     if (menu.value[index]) {
@@ -191,8 +191,8 @@ const editProductById = async () => {
             _id: editproduct.value.id,
             name: editproduct.value.name,
             size: editproduct.value.size,
-            price: editproduct.value.price,
-            buyyingPrice: editproduct.value.buyyingPrice
+            sellingPrice: editproduct.value.sellingPrice,
+            costPrice: editproduct.value.costPrice
         });
         if (res.status == 200) {
             isLoading.value = false;

@@ -14,12 +14,12 @@
                     <InputText id="productTitle" size="large" v-model="productTitle" placeholder="Aralashma nomi" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="price">Tayyorlash narxi <span class="text-red-500">*</span></label>
-                    <InputNumber id="price" v-model="minPrice" size="large" disabled suffix=" UZS" class="w-full" />
+                    <label for="costPrice">Tayyorlash narxi <span class="text-red-500">*</span></label>
+                    <InputNumber id="costPrice" v-model="minPrice" size="large" disabled suffix=" UZS" class="w-full" />
                 </span>
                 <span class="grid gap-2">
-                    <label for="price">Sotish narxi <span class="text-red-500">*</span></label>
-                    <InputNumber id="price" v-model="newProduct.price" size="large" suffix=" UZS" class="w-full" />
+                    <label for="sellingPrice">Sotish narxi <span class="text-red-500">*</span></label>
+                    <InputNumber id="sellingPrice" v-model="newProduct.sellingPrice" size="large" suffix=" UZS" class="w-full" />
                 </span>
                 <span class="grid gap-2">
                     <label for="description">Tafsilot <span class="text-red-500">*</span></label>
@@ -49,7 +49,7 @@
                             <template #body="{ data }"> {{ data.kg }} Kg </template>
                         </Column>
                         <Column header="Narx">
-                            <template #body="{ data }"> {{ formatCurrency(data.buyyingPrice * data.kg) }} </template>
+                            <template #body="{ data }"> {{ formatCurrency(data.costPrice * data.kg) }} </template>
                         </Column>
                         <Column header="Amallar">
                             <template #body="{ data }">
@@ -129,7 +129,7 @@ const addProductToComposition = () => {
         id: changedProduct.value._id,
         kg: changeAmount.value,
         name: changedProduct.value.name,
-        buyyingPrice: changedProduct.value.buyyingPrice
+        costPrice: changedProduct.value.costPrice
     };
 
     const alreadyExists = newProduct.value.composition.some((p) => p.id === newItem.id);
@@ -168,8 +168,8 @@ const loadSavedProduct = () => {
         newProduct.value = {
             title: savedData.title || '',
             totalKg: totalSize,
-            price: savedData.price,
-            basePrice: minPrice,
+            sellingPrice: savedData.sellingPrice,
+            costPrice: minPrice,
             description: savedData.description,
             composition: savedData.composition || []
         };
@@ -182,7 +182,7 @@ const totalSize = computed(() => {
 
 const minPrice = computed(() => {
     const total = newProduct.value.composition.reduce((sum, item) => {
-        return sum + Number(item.buyyingPrice || 0) * Number(item.kg || 0);
+        return sum + Number(item.costPrice || 0) * Number(item.kg || 0);
     }, 0);
     return totalSize.value > 0 ? total / totalSize.value : 0;
 });
@@ -200,10 +200,8 @@ const createNewMix = async () => {
         const res = await axios.post(`/api/mix`, {
             title: newProduct.value.title,
             description: newProduct.value.description,
-            sellingPrice: newProduct.value.price,
-            originalPrice: minPrice.value,
-            totalKg: totalSize.value,
-            quantity: 0,
+            sellingPrice: newProduct.value.sellingPrice,
+            costPrice: minPrice.value,
             products: mappedProducts
         });
         console.log(res);
