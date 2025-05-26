@@ -70,8 +70,8 @@
             <Column field="size" header="Sotilgan Mahsulot">
                 <template #body="slotProps">{{ slotProps.data.size }} Kg</template>
             </Column>
-            <Column field="originalPrice" header="Tannarxi">
-                <template #body="slotProps">{{ formatCurrency(slotProps.data.originalPrice) }}</template>
+            <Column field="costPrice" header="Tannarxi">
+                <template #body="slotProps">{{ formatCurrency(slotProps.data.costPrice) }}</template>
             </Column>
             <Column field="sellingPrice" header="Sotilish Narxi">
                 <template #body="slotProps">{{ formatCurrency(slotProps.data.sellingPrice) }}</template>
@@ -83,7 +83,7 @@
             </Column>
             <Column field="size" header="Foyda">
                 <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.size * (slotProps.data.sellingPrice - slotProps.data.originalPrice)) }}
+                    {{ formatCurrency(slotProps.data.size * (slotProps.data.sellingPrice - slotProps.data.costPrice)) }}
                 </template>
             </Column>
             <Column field="createdAt" header="Sotilgan Vaqti">

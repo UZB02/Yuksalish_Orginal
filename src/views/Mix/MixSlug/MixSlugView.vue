@@ -13,7 +13,7 @@
         <div>
             <p class="text-xs uppercase text-gray-400">1 kg tannarx</p>
             <h6>
-                {{ data.originalPrice ? formatCurrency(Number(data?.originalPrice)) : 'Loading...' }}
+                {{ data.costPrice ? formatCurrency(Number(data?.costPrice)) : 'Loading...' }}
             </h6>
         </div>
         <div>

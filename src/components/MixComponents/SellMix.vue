@@ -7,7 +7,7 @@
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(mix.originalPrice) }}</h6>
+                <h6>{{ formatCurrency(mix.costPrice) }}</h6>
             </span>
         </div>
 
@@ -25,9 +25,9 @@
                 <InputNumber id="mixSize" v-model="sellMix.size" />
             </span>
             <span class="grid gap-2">
-                <label for="sellingPrice" class="flex gap-2">Sotish narxi (UZS) <span class="text-red-500">*</span><span>Tannarxi: {{formatCurrency(mix.originalPrice)}}</span></label>
+                <label for="sellingPrice" class="flex gap-2">Sotish narxi (UZS) <span class="text-red-500">*</span><span>Tannarxi: {{formatCurrency(mix.costPrice)}}</span></label>
                 <InputNumber id="sellingPrice" v-model="sellMix.sellingPrice" />
-                <small v-if="sellMix.sellingPrice < sellMix.originalPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
+                <small v-if="sellMix.sellingPrice < sellMix.costPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
                 <label for="payed">To'langan summa (UZS)  <span class="text-red-500">*</span></label>
@@ -101,8 +101,8 @@ const sellMix = ref({
     fullName: '',
     mixId: mix._id,
     size: null,
-    sellingPrice: mix.price,
-    originalPrice: mix.basePrice,
+    sellingPrice: mix.sellingPrice,
+    costPrice: mix.costPrice,
     clientPhoneNumber: '',
     sellerPhoneNumber:authStore.user.phoneNumber,
     description: '',
@@ -136,14 +136,14 @@ const sellmixfunction = async () => {
             mixId: sellMix.value.mixId,
             size: sellMix.value.size,
             sellingPrice: sellMix.value.sellingPrice,
-            originalPrice: sellMix.value.originalPrice,
+            costPrice: sellMix.value.costPrice,
             clientPhoneNumber: sellMix.value.clientPhoneNumber,
             sellerPhoneNumber:sellMix.value.sellerPhoneNumber,
             description: sellMix.value.description,
             payed: sellMix.value.payed
             // currency: sellMix.value.currency,
             // totalAmount: sellMix.value.sellingPrice * sellMix.value.size,
-            // profit: sellMix.value.sellingPrice * sellMix.value.size - sellMix.value.originalPrice * sellMix.value.size
+            // profit: sellMix.value.sellingPrice * sellMix.value.size - sellMix.value.costPrice * sellMix.value.size
         });
         if (res.status === 201) {
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: 'Mahsulot Sotildi', life: 3000 });

@@ -7,7 +7,7 @@
             </span>
             <span class="grid grid-cols-1 md:grid-cols-2 md:flex md:flex-wrap md:gap-2">
                 <label>Tannarxi:</label>
-                <h6>{{ formatCurrency(product.buyyingPrice * product.size)}}</h6>
+                <h6>{{ formatCurrency(product.costPrice * product.size)}}</h6>
             </span>
         </div>
         <div class="grid grid-cols-1 gap-4">
@@ -16,8 +16,8 @@
             <InputNumber type="number" id="size" v-model="productSize" />
         </span>
           <span class="grid  gap-2">
-            <label for="buyyingPrice">Sotib olish narxi (UZS)</label>
-            <InputNumber type="number" id="buyyingPrice" v-model="costPrice" />
+            <label for="costPrice">Sotib olish narxi (UZS)</label>
+            <InputNumber type="number" id="costPrice" v-model="costPrice" />
         </span>
           <span class="grid  gap-2">
             <label for="sellingPrice">Sotish narxi (UZS)</label>
