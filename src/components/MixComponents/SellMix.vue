@@ -38,7 +38,7 @@
                 <InputNumber id="payed" v-model="sellMix.remaining" />
             </span>
             <!-- sms -->
-            <div>
+            <!-- <div>
                 <span class="grid gap-2">
                     <label for="buyyerNote">Haridor uchun</label>
                     <Textarea id="buyyerNote" v-model="sellSMS.buyyerNote" variant="filled" rows="5" cols="30" placeholder="Haridor uschun eslatma kiriting" />
@@ -47,12 +47,12 @@
                     <label for="adminNote">Sotuvchi uchun</label>
                     <Textarea id="adminNote" v-model="sellSMS.adminNote" variant="filled" rows="5" cols="30" placeholder="Sotuvchi uschun eslatma kiriting" />
                 </span>
-            </div>
+            </div> -->
             <span class="grid gap-2">
                 <label for="description">Tafsilot</label>
                 <Textarea id="mixDescription" v-model="sellMix.description" variant="filled" rows="5" cols="30" placeholder="Tafsilot kiriting" />
             </span>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
                 <ToggleButton v-model="checkedNote" class="w-24" onLabel="Eslatma" offLabel="Eslatma" />
             </div>
             <div v-if="checkedNote" class="flex flex-col gap-4">
@@ -68,7 +68,7 @@
                     <label for="adminNote">Sotuvchi uchun</label>
                     <Textarea id="adminNote" v-model="sellmixNote.adminNote" variant="filled" rows="5" cols="30" placeholder="Sotuvchi uschun eslatma kiriting" />
                 </span>
-            </div>
+            </div> -->
             <Button @click="sellmixfunction" size="large" :label="isloading ? 'Loading...' : 'Sotish'" />
         </div>
     </section>
