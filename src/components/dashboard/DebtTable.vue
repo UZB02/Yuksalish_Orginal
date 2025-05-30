@@ -1,12 +1,26 @@
 
 <template>
     <div class="card ">
-      <h1 class="text-xl">Aralashma sotuvi</h1>
+      <h1 class="text-xl">Qarzdorlar</h1>
         <DataTable :value="products" tableStyle="min-width: 50rem">
             <Column field="code" header="Sana"></Column>
             <Column field="name" header="Haridor"></Column>
-            <Column field="category" header="Aralashma"></Column>
+            <Column field="name" header="Telefon"></Column>
+            <Column field="category" header="Mahsulot"></Column>
             <Column field="quantity" header="Kg"></Column>
+            <Column field="category" header="Qarz"></Column>
+               <Column header="Amallar">
+                <template #body="slotProps">
+                    <div class="flex gap-3">
+                        <button v-tooltip.top="'O\'chirish'" @click="deletProductHistoryModal(slotProps.data)">
+                            <i class="pi pi-trash text-red-500 mr-2"></i>
+                        </button>
+                        <button v-tooltip.top="'Tafsilot'" @click="viewDescription(slotProps.data)">
+                            <i class="pi pi-eye"></i>
+                        </button>
+                    </div>
+                </template>
+            </Column>
         </DataTable>
     </div>
 </template>

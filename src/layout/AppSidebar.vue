@@ -3,7 +3,7 @@ import AppMenu from './AppMenu.vue';
 </script>
 
 <template>
-    <div class="layout-sidebar border-r xl:-mt-1">
+    <div class="layout-sidebar xl:-mt-1">
         <app-menu></app-menu>
     </div>
 </template>
