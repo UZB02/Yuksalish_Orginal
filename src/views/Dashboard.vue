@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-// Sizning komponentlar
 import SummaryCards from '../components/dashboard/SummaryCards.vue';
 import IncomeChart from '../components/dashboard/IncomeChart.vue';
-import TodayStats from '../components/dashboard/TodayStats.vue';
 import RecentSalesTable from '../components/dashboard/RecentSalesTable.vue';
 import DebtTable from "@/components/dashboard/DebtTable.vue"
 
@@ -31,49 +29,25 @@ const date = ref(new Date());
         />
       </div>
     </div>
-
-    <!-- Loading State -->
-    <!-- <div class="flex justify-center py-12">
-      <ProgressSpinner />
-    </div> -->
-
-    <!-- Error State -->
-    <!-- <Card  class="p-error mb-6">
-      <div class="flex items-center gap-2">
-        <i class="pi pi-exclamation-triangle text-red-500 text-xl"></i>
-        <span class="text-red-600">{{ error }}</span>
-      </div>
-    </Card> -->
-
     <!-- Main Content -->
     <div class="space-y-6">
       <!-- Summary Cards -->
-      <SummaryCards 
-      />
+      <SummaryCards :date="date"/>
 
       <!-- Charts Section -->
       <div class="grid grid-cols-1 gap-6">
-          <IncomeChart />
-        <!-- <Card class="lg:col-span-1 p-6">
-          <TodayStats 
-            :dailyStats="dailyStats" 
-            :formatCurrency="formatCurrency" 
-          />
-        </Card> -->
+          <IncomeChart :date="date" />
       </div>
 
       <!-- Qarzdorlar -->
       <div>
-        <DebtTable 
-        />
+        <DebtTable :date="date"/>
       </div>
       <!-- Recent Sales Tables -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-        <RecentSalesTable 
-        />
+        <RecentSalesTable :date="date"/>
 
-        <RecentSalesTable 
-        />
+        <RecentSalesTable :date="date"/>
       </div>
     </div>
   </div>
