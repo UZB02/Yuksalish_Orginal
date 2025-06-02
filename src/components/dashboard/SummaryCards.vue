@@ -41,11 +41,11 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Jami sotuv</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-             {{ formatCurrency(combinedStats.totalSoldAmount) }}
+             {{ combinedStats?.totalSoldAmount != null ? formatCurrency(combinedStats.totalSoldAmount) : 'Loading...' }}
             </div>
             <div class="grid grid-cols-2">
-              <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalKgSold }} Kg</div>
-            <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalSalesCount }} ta sotuv</div>
+              <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalKgSold ? combinedStats.totalKgSold : 'Loading...' }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalSalesCount ? combinedStats.totalSalesCount : 'Loading...' }} ta sotuv</div>
             </div>
           </div>
         </div>
@@ -78,11 +78,11 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Sotilgan mahsulotlar</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-             {{ formatCurrency(productStats.totalSoldAmount) }}
+             {{ productStats.totalSoldAmount ? formatCurrency(productStats.totalSoldAmount) : 'Loading...'}}
             </div>
-            <div class="grid grid-cols-2">
-              <div class="text-sm text-blue-600 mt-1">{{ productStats.totalKgSold }} Kg</div>
-            <div class="text-sm text-blue-600 mt-1">{{ productStats.totalSalesCount }} ta sotuv</div>
+           <div class="grid grid-cols-2">
+              <div class="text-sm text-blue-600 mt-1">{{ productStats.totalKgSold ? productStats.totalKgSold : 'Loading...' }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ productStats.totalSalesCount ? productStats.totalSalesCount : 'Loading...' }} ta sotuv</div>
             </div>
           </div>
         </div>
@@ -97,11 +97,11 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Sotilgan aralashmalar</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-              {{ formatCurrency(mixStats.totalSoldAmount) }}
+              {{ mixStats.totalSoldAmount ? formatCurrency(mixStats.totalSoldAmount) : 'Loading...'}}
             </div>
-            <div class="grid grid-cols-2">
-              <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalKgSold }} Kg</div>
-            <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalSalesCount }} ta sotuv</div>
+          <div class="grid grid-cols-2">
+              <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalKgSold ? mixStats.totalKgSold : 'Loading...' }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalSalesCount ? mixStats.totalSalesCount : 'Loading...' }} ta sotuv</div>
             </div>
           </div>
         </div>
