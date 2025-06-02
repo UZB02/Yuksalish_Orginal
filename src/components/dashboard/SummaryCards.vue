@@ -1,5 +1,27 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps,ref } from 'vue';
+import axios from 'axios';
+import formatCurrency from '@/utils/PriceFormatter';
+
+const data=ref({})
+const combinedStats=ref({})
+const mixStats=ref({})
+const productStats=ref({})
+
+
+const getProduct = async () => {
+    try {
+        const res = await axios.get('/api/statistics/monthly?year=2025&month=5');
+        data.value = res.data;
+        combinedStats.value=res.data.combinedStats;
+        mixStats.value=res.data.mixStats;
+        productStats.value=res.data.productStats
+        console.log(data.value);
+    } catch (error) {
+        console.log(error);
+    }
+};
+getProduct()
 
 defineProps({
   generalStats: Object,
@@ -10,7 +32,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <!-- Total Sales -->
     <Card>
       <template #content>
@@ -19,10 +41,11 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Jami sotuv</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-             30000
+             {{ formatCurrency(combinedStats.totalSoldAmount) }}
             </div>
-            <div class="text-sm text-green-600 mt-1 flex items-center">
-              <i class="pi pi-arrow-up mr-1"></i> +10%
+            <div class="grid grid-cols-2">
+              <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalKgSold }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ combinedStats.totalSalesCount }} ta sotuv</div>
             </div>
           </div>
         </div>
@@ -30,14 +53,14 @@ defineProps({
     </Card>
 
     <!-- Total Profit -->
-    <Card>
+    <!-- <Card>
       <template #content>
         <div class="flex items-center">
           <Avatar icon="pi pi-chart-line" class="bg-green-100 text-green-600 mr-4" size="large" />
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Jami foyda</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-             50000
+             {{ formatCurrency(50000) }}
             </div>
             <div class="text-sm text-green-600 mt-1 flex items-center">
               <i class="pi pi-arrow-up mr-1"></i> +70%
@@ -45,7 +68,7 @@ defineProps({
           </div>
         </div>
       </template>
-    </Card>
+    </Card> -->
 
     <!-- Products Sold -->
     <Card>
@@ -55,9 +78,12 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Sotilgan mahsulotlar</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-              80000
+             {{ formatCurrency(productStats.totalSoldAmount) }}
             </div>
-            <div class="text-sm text-blue-600 mt-1">4 ta mavjud</div>
+            <div class="grid grid-cols-2">
+              <div class="text-sm text-blue-600 mt-1">{{ productStats.totalKgSold }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ productStats.totalSalesCount }} ta sotuv</div>
+            </div>
           </div>
         </div>
       </template>
@@ -71,9 +97,12 @@ defineProps({
           <div class="flex-1">
             <div class="text-sm text-gray-600 dark:text-gray-300">Sotilgan aralashmalar</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
-              90000
+              {{ formatCurrency(mixStats.totalSoldAmount) }}
             </div>
-            <div class="text-sm text-blue-600 mt-1">7 ta mavjud</div>
+            <div class="grid grid-cols-2">
+              <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalKgSold }} Kg</div>
+            <div class="text-sm text-blue-600 mt-1">{{ mixStats.totalSalesCount }} ta sotuv</div>
+            </div>
           </div>
         </div>
       </template>
