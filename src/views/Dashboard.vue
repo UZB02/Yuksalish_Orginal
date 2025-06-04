@@ -44,11 +44,11 @@ const date = ref(new Date());
         <DebtTable :date="date"/>
       </div>
       <!-- Recent Sales Tables -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <RecentSalesTable :date="date"/>
 
         <RecentSalesTable :date="date"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

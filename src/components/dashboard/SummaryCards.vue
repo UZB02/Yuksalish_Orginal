@@ -26,8 +26,6 @@ const getData = async () => {
     combinedStats.value = res.data.combinedStats;
     mixStats.value = res.data.mixStats;
     productStats.value = res.data.productStats;
-
-    console.log('Fetched:', res.data);
   } catch (error) {
     console.error('Xatolik:', error);
   }

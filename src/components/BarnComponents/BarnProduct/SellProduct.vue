@@ -103,7 +103,7 @@ const sellProductNote = ref({
     buyyerNote: '',
     adminNote: '',
     timeNote: '',
-    timestamp:null
+    timestamp: null
 });
 
 const sellProductfunction = async () => {
@@ -158,13 +158,16 @@ watch(
 );
 
 // `timeNote` o'zgarganida avtomatik timestampga o'tkazamiz
-watch(() => sellProductNote.value.timeNote, (newVal) => {
-  if (newVal instanceof Date) {
-    sellProductNote.value.timestamp = newVal.getTime()
-  } else {
-    sellProductNote.value.timestamp = null
-  }
-})
+watch(
+    () => sellProductNote.value.timeNote,
+    (newVal) => {
+        if (newVal instanceof Date) {
+            sellProductNote.value.timestamp = newVal.getTime();
+        } else {
+            sellProductNote.value.timestamp = null;
+        }
+    }
+);
 </script>
 
 <style scoped>
