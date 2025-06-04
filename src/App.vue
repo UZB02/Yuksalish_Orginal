@@ -3,7 +3,7 @@ import axios from 'axios';
 import AuthProvider from './Provider/AuthProvider.vue';
 
 const token = sessionStorage.getItem('authToken');
-axios.defaults.baseURL = 'https://yuksalish-node-1.onrender.com';
+axios.defaults.baseURL = 'https://yuksalish-server.onrender.com';
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 </script>

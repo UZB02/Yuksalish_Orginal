@@ -1,6 +1,9 @@
 <template>
   <div class="card">
-    <h1 class="text-xl">Qarzdorlar</h1>
+    <span class="flex justify-between items-center">
+        <h1 class="text-xl">Qarzdorlar</h1>
+        <h1 class="text-xl">{{ formatCurrency(totalDebt) }}</h1>
+    </span>
     <DataTable :value="deptors" tableStyle="min-width: 80rem">
       <Column field="createdAt" header="Sana">
         <template #body="slotProps">
@@ -84,7 +87,7 @@
 
     <div class="flex justify-end gap-2">
       <Button type="button" label="Bekor qilish" severity="secondary" @click="visible = false" />
-      <Button type="button" label="Saqlash" @click="handlePay" />
+      <Button type="button" label="To'lash" @click="handlePay()" />
     </div>
   </Dialog>
   <!-- End Payed Modal -->
@@ -107,6 +110,7 @@ const payed = ref({});
 const payedAmount = ref(0);
 const visible = ref(false);
 const deptors = ref([]);
+const totalDebt=ref(null)
 
 const fetchDebetdata = async () => {
   try {
@@ -115,6 +119,7 @@ const fetchDebetdata = async () => {
 
     const res = await axios.get(`/api/statistics/debtors?year=${year}&month=${month}`);
     deptors.value = res.data.debtors || [];
+    totalDebt.value=res.data.totalDebt
   } catch (err) {
     console.log(err);
   }
@@ -130,12 +135,12 @@ const toggleModal = (item) => {
 
 const handlePay = async () => {
   try {
-    await axios.post(`/api/debt/pay`, {
-      id: payed.value.id,
+    const res=await axios.patch(`/api/mix/${payed.value._id}/payDebt`, {
       amount: payedAmount.value
     });
+    console.log(res);
     visible.value = false;
-    fetchDebetdata(); // ma'lumotlarni yangilash
+    fetchDebetdata();
   } catch (err) {
     console.error('To‘lovda xatolik:', err);
   }
@@ -150,5 +155,8 @@ fetchDebetdata();
 .card {
   padding: 15px;
   margin: 0;
+}
+h1{
+    margin: 0;
 }
 </style>
