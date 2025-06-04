@@ -189,7 +189,6 @@ const minPrice = computed(() => {
 
 
 const createNewMix = async () => {
-    console.log('Yangi mahsulot:', newProduct.value);
     isloading.value = true;
     // Har bir mahsulotni kerakli formatga o'tkazamiz
     const mappedProducts = newProduct.value.composition.map((item) => ({
@@ -204,7 +203,6 @@ const createNewMix = async () => {
             costPrice: minPrice.value,
             products: mappedProducts
         });
-        console.log(res);
         if (res.status === 201) {
             isloading.value = false;
             toast.add({ severity: 'success', summary: 'Bajarildi', detail: "Muvofaqqiyatli qo'shildi", life: 3000 });

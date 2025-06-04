@@ -95,7 +95,6 @@ const props = defineProps({
 const mix = props.mix;
 const isloading = ref(false);
 const checkedNote = ref(false);
-console.log(mix);
 
 const sellMix = ref({
     fullName: '',

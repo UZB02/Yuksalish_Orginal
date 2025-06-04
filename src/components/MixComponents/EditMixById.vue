@@ -125,7 +125,6 @@ const getMixById = async () => {
     try {
         const res = await axios.get(`/api/mix/${mixId}`);
         mix.value = res.data;
-        console.log(mix.value);
         newProduct.value = {
             title: res.data.title,
             description: res.data.description,

@@ -190,7 +190,6 @@ const getMixHistoryById = async () => {
             loadingmix.value = false;
             mixHistory.value = response.data;
             totalItems.value = response.data.total;
-            console.log(mixHistory.value);
         }
     } catch (error) {
         console.error(error);
@@ -202,7 +201,6 @@ const getMixHistoryById = async () => {
 const deletmixHistoryModal = (item) => {
     deletModal.value = true;
     delmix.value = item;
-    console.log(delmix.value._id);
 };
 
 const deletemixHistory = async () => {

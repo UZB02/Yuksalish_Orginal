@@ -45,7 +45,6 @@ const emits = defineEmits(['refreshFunction']);
 const props = defineProps({
     admin: { type: Object, required: true }
 });
-console.log(props.admin);
 const isloading = ref(false);
 const editAdmin = reactive({
     firstName: props.admin.firstName,

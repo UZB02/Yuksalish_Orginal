@@ -12,7 +12,6 @@ const logout = () => {
     authStore.logout();
     visible.value=false
 };
-console.log(authStore.user);
 </script>
 
 <template>

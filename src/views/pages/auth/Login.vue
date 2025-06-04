@@ -20,7 +20,7 @@ const login = async () => {
             router.push('/');
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 1500);
             loadinLogin.value = false;
         }
         if (res.status == 401 || res.status == 404) {

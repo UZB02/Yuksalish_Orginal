@@ -51,7 +51,7 @@ const getMixById = async () => {
     try {
         const response = await axios.get(`/api/mix/${id}`);
         data.value = response.data;
-        console.log(data.value);
+
     } catch (error) {
         console.error(error);
     }

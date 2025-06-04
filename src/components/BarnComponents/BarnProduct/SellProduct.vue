@@ -107,7 +107,6 @@ const sellProductNote = ref({
 });
 
 const sellProductfunction = async () => {
-    console.log(sellProduct.value);
     if (sellProduct.value.customer == '' || sellProduct.value.sellingPrice == '' || sellProduct.value.size == null) {
         toast.add({ severity: 'error', summary: 'Xatolik', detail: "Maydonlarni to'ldiring", life: 3000 });
         return;

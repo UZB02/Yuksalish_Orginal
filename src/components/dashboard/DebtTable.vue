@@ -130,7 +130,6 @@ const toggleModal = (item) => {
   visible.value = true;
   payed.value = item;
   payedAmount.value = 0;
-  console.log('Tanlangan qarzdor:', item);
 };
 
 const handlePay = async () => {
@@ -138,7 +137,6 @@ const handlePay = async () => {
     const res=await axios.patch(`/api/mix/${payed.value._id}/payDebt`, {
       amount: payedAmount.value
     });
-    console.log(res);
     visible.value = false;
     fetchDebetdata();
   } catch (err) {

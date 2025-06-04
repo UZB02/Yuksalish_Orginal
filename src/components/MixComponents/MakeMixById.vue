@@ -35,7 +35,6 @@ const props = defineProps({
 const mix = props.mix;
 const isloading = ref(false);
 const mixPrice = ref(mix.sellingPrice || 0);
-console.log(mixPrice.value);
 
 const MakeMixById = async () => {
     isloading.value = true;
