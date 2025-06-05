@@ -39,21 +39,17 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellmixModalOpen(mix.data)" :disabled="mix.data.quantity==0 || mix.data.totalKg==0" class="flex items-center gap-2">
+                        <Button @click="SellmixModalOpen(mix.data)" :disabled="mix.data.quantity == 0 || mix.data.totalKg == 0" class="flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
-                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary"
-                            @click="mixhistoryexportToExcelById(mixHistory.history, mix.data.title)"
-                            class="flex items-center gap-2" :disabled="mixHistory==null">
+                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="mixhistoryexportToExcelById(mixHistory.history, mix.data.title)" class="flex items-center gap-2" :disabled="mixHistory == null">
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>
                         </Button>
                     </div>
                     <div class="text-end pb-4">
-                        <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true"
-                            v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date"
-                            @input="getMixHistoryById" class="w-full lg:w-44" />
+                        <DatePicker :showIcon="true" iconDisplay="button" :showButtonBar="true" v-tooltip.top="'Sana bo\'yicha qidirish'" v-model="date" @input="getMixHistoryById" class="w-full lg:w-44" />
                     </div>
                 </div>
             </template>
@@ -61,8 +57,7 @@
             <Column field="fullName" header="Haridor"></Column>
             <Column field="clientPhoneNumber" header="Tell">
                 <template #body="slotProps">
-                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.clientPhoneNumber"
-                        class="text-blue-800 hover:underline dark:text-white">
+                    <a v-tooltip.top="`Qo'ng'iroq qilish`" :href="'tel:' + slotProps.data.clientPhoneNumber" class="text-blue-800 hover:underline dark:text-white">
                         {{ slotProps.data.clientPhoneNumber }}
                     </a>
                 </template>
@@ -76,11 +71,17 @@
             <Column field="sellingPrice" header="Sotilish Narxi">
                 <template #body="slotProps">{{ formatCurrency(slotProps.data.sellingPrice) }}</template>
             </Column>
-            <Column field="size" header="Tushkan Summa">
+            <Column field="size" header="To'langan Summa">
+                <template #body="slotProps">
+                    <p :class="slotProps.data.payed >= slotProps.data.size * slotProps.data.sellingPrice ? '' : 'text-red-500'">{{ formatCurrency(slotProps.data.payed) }}</p>
+                </template>
+            </Column>
+            <Column field="size" header="Jami Summa">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.size * slotProps.data.sellingPrice) }}
                 </template>
             </Column>
+
             <Column field="size" header="Foyda">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.size * (slotProps.data.sellingPrice - slotProps.data.costPrice)) }}
@@ -112,14 +113,12 @@
         </div>
         <template #footer>
             <Button label="Yo'q" icon="pi pi-times" @click="deletModal = false" text severity="secondary" />
-            <Button :label="isloading ? 'Loading...' : 'O\'chirish'" icon="pi pi-trash" @click="deletemixHistory"
-                severity="danger" outlined autofocus />
+            <Button :label="isloading ? 'Loading...' : 'O\'chirish'" icon="pi pi-trash" @click="deletemixHistory" severity="danger" outlined autofocus />
         </template>
     </Dialog>
 
     <!-- View Modal -->
-    <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }"
-        :modal="true">
+    <Dialog header="Tafsilot" v-model:visible="viewVisible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
         <h3 class="text-lg font-semibold">{{ viewmix?.fullName }}</h3>
         <p class="mt-4">{{ viewmix?.description || 'Tafsilotlar mavjud emas!' }}</p>
         <template #footer>
@@ -128,8 +127,7 @@
     </Dialog>
 
     <!-- Sellmix Drawer -->
-    <Drawer v-model:visible="visibleSellmix" :header="mix.data.title + ` dan sotish`" position="right"
-        class="!w-full md:!w-96 lg:!w-[30rem]">
+    <Drawer v-model:visible="visibleSellmix" :header="mix.data.title + ` dan sotish`" position="right" class="!w-full md:!w-96 lg:!w-[30rem]">
         <SellMix :mix="mix.data" @refreshGetMixFunction="refreshGetMixFunction" />
     </Drawer>
 
@@ -142,13 +140,13 @@
 
 <script setup>
 import formatDateTime from '@/utils/DateTimeFormatter';
-import formatCurrency from '@/utils/PriceFormatter';
 import mixhistoryexportToExcelById from '@/utils/MixHistoryExcelFormater';
-import SellMix from '../SellMix.vue';
+import formatCurrency from '@/utils/PriceFormatter';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import SellMix from '../SellMix.vue';
 
 const emits = defineEmits(['getMixById']);
 
@@ -193,7 +191,7 @@ const getMixHistoryById = async () => {
         }
     } catch (error) {
         console.error(error);
-        toast.add({ severity: 'error', summary: 'Xatolik', detail: error?.response?.data?.message || "Server xatoligi", life: 3000 });
+        toast.add({ severity: 'error', summary: 'Xatolik', detail: error?.response?.data?.message || 'Server xatoligi', life: 3000 });
         loadingmix.value = false;
     }
 };
@@ -212,7 +210,7 @@ const deletemixHistory = async () => {
             life: 3000
         });
         return;
-    } 
+    }
     isloading.value = true;
     try {
         const res = await axios.delete(`/api/mix/${delmix.value._id}`);

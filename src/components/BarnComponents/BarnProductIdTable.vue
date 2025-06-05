@@ -72,17 +72,19 @@
                     {{ formatCurrency(slotProps.data.sellingPrice) }}
                 </template>
             </Column>
-
-            <Column field="totalPrice" header="Tushkan summa">
+            <Column field="totalPrice" header="To'langan summa">
+                <template #body="slotProps">
+                    <p :class="slotProps.data.payed >= slotProps.data.totalPrice ? '' : 'text-red-500'">
+                        {{ formatCurrency(slotProps.data.payed) }}
+                    </p>
+                </template>
+            </Column>
+            <Column field="totalPrice" header="Jami summa">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.totalPrice) }}
                 </template>
             </Column>
-            <Column field="totalPrice" header="To'langan summa">
-                <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.payed) }}
-                </template>
-            </Column>
+
             <Column field="profit" header="Foyda">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.profit) }}

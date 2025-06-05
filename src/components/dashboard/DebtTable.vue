@@ -125,7 +125,7 @@ const toggleModal = (item) => {
 const handlePay = async () => {
     try {
         await axios.patch(`/api/mix/${payed.value._id}/payDebt`, {
-            amount: payedAmount.value
+            amount: Number(payedAmount.value)
         });
         visible.value = false;
         fetchDebetdata();

@@ -25,12 +25,14 @@
                 <InputNumber id="mixSize" v-model="sellMix.size" />
             </span>
             <span class="grid gap-2">
-                <label for="sellingPrice" class="flex gap-2">Sotish narxi (UZS) <span class="text-red-500">*</span><span>Tannarxi: {{formatCurrency(mix.costPrice)}}</span></label>
+                <label for="sellingPrice" class="flex gap-2"
+                    >Sotish narxi (UZS) <span class="text-red-500">*</span><span>Tannarxi: {{ formatCurrency(mix.costPrice) }}</span></label
+                >
                 <InputNumber id="sellingPrice" v-model="sellMix.sellingPrice" />
                 <small v-if="sellMix.sellingPrice < sellMix.costPrice" class="text-red-500"> Sotish narxi tannarxidan kam ! </small>
             </span>
             <span class="grid gap-2">
-                <label for="payed">To'langan summa (UZS)  <span class="text-red-500">*</span></label>
+                <label for="payed">To'langan summa (UZS) <span class="text-red-500">*</span></label>
                 <InputNumber id="payed" v-model="sellMix.payed" />
             </span>
             <span class="grid gap-2">
@@ -75,6 +77,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore.js';
 import formatCurrency from '@/utils/PriceFormatter';
 import axios from 'axios';
 import InputMask from 'primevue/inputmask';
@@ -83,7 +86,6 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref, watch } from 'vue';
-import { useAuthStore } from '@/stores/useAuthStore.js';
 const authStore = useAuthStore();
 const toast = useToast();
 
@@ -103,10 +105,10 @@ const sellMix = ref({
     sellingPrice: mix.sellingPrice,
     costPrice: mix.costPrice,
     clientPhoneNumber: '',
-    sellerPhoneNumber:authStore.user.phoneNumber,
+    sellerPhoneNumber: authStore.user.phoneNumber,
     description: '',
     payed: '',
-    remaining: '',
+    remaining: ''
     // profit:'',
     // totalAmount:''
     // currency: 'UZS',
@@ -137,9 +139,9 @@ const sellmixfunction = async () => {
             sellingPrice: sellMix.value.sellingPrice,
             costPrice: sellMix.value.costPrice,
             clientPhoneNumber: sellMix.value.clientPhoneNumber,
-            sellerPhoneNumber:sellMix.value.sellerPhoneNumber,
+            sellerPhoneNumber: sellMix.value.sellerPhoneNumber,
             description: sellMix.value.description,
-            payed: sellMix.value.payed
+            payed: Number(sellMix.value.payed)
             // currency: sellMix.value.currency,
             // totalAmount: sellMix.value.sellingPrice * sellMix.value.size,
             // profit: sellMix.value.sellingPrice * sellMix.value.size - sellMix.value.costPrice * sellMix.value.size
