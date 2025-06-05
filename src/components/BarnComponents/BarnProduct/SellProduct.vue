@@ -122,6 +122,7 @@ const sellProductfunction = async () => {
             clientPhoneNumber: sellProduct.value.phone,
             sellerPhoneNumber: sellProduct.value.sellerPhoneNumber,
             currency: sellProduct.value.currency,
+            payed:sellProduct.value.payed,
             description: sellProduct.value.description,
             totalPrice: sellProduct.value.sellingPrice * sellProduct.value.size,
             profit: sellProduct.value.sellingPrice * sellProduct.value.size - sellProduct.value.costPrice * sellProduct.value.size,

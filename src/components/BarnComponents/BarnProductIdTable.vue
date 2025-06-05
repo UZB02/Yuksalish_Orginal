@@ -62,19 +62,25 @@
             <Column field="size" header="Sotilgan Mahsulot">
                 <template #body="slotProps"> {{ slotProps.data.size }} Kg </template>
             </Column>
-            <Column field="sellingPrice" header="Sotilish Narxi">
-                <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.sellingPrice) }}
-                </template>
-            </Column>
             <Column field="costPrice" header="Tannarxi">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.costPrice) }}
                 </template>
             </Column>
-            <Column field="totalPrice" header="Tushkan Summa">
+            <Column field="sellingPrice" header="Sotilish Narxi">
+                <template #body="slotProps">
+                    {{ formatCurrency(slotProps.data.sellingPrice) }}
+                </template>
+            </Column>
+
+            <Column field="totalPrice" header="Tushkan summa">
                 <template #body="slotProps">
                     {{ formatCurrency(slotProps.data.totalPrice) }}
+                </template>
+            </Column>
+            <Column field="totalPrice" header="To'langan summa">
+                <template #body="slotProps">
+                    {{ formatCurrency(slotProps.data.payed) }}
                 </template>
             </Column>
             <Column field="profit" header="Foyda">
@@ -102,12 +108,16 @@
             <template #header>
                 <div class="flex items-center justify-between">
                     <div class="text-end flex gap-2 pb-4">
-                        <Button @click="SellProductModalOpen(product.data)" :disabled="product.data.size==0" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
+                        <Button @click="SellProductModalOpen(product.data)" :disabled="product.data.size == 0" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2">
                             <i class="pi pi-cart-minus"></i>
                             <span class="hidden sm:inline">Sotish</span>
                         </Button>
-                        <Button v-tooltip.top="'Excelga yuklash'" severity="secondary" @click="exportToExcel(productHistory.history, product.data.name)" class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2"
-                        :disabled="productHistory===null"
+                        <Button
+                            v-tooltip.top="'Excelga yuklash'"
+                            severity="secondary"
+                            @click="exportToExcel(productHistory.history, product.data.name)"
+                            class="col-span-2 sm:col-span-4 md:col-span-3 xl:col-span-2 flex items-center gap-2"
+                            :disabled="productHistory === null"
                         >
                             <i class="pi pi-download"></i>
                             <span class="hidden sm:inline">Yuklash</span>

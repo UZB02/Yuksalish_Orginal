@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <span class="flex justify-between items-center">
-            <h1 class="text-xl">Aralshmadagi qarzdorlar</h1>
+            <h1 class="text-xl">Ombordagi qarzdorlar</h1>
             <h1 class="text-xl">{{ formatCurrency(totalDebt) }}</h1>
         </span>
         <DataTable :value="deptors" tableStyle="min-width: 80rem">
@@ -11,7 +11,7 @@
                 </template>
             </Column>
 
-            <Column field="fullName" header="Haridor"></Column>
+            <Column field="name" header="Haridor"></Column>
 
             <Column field="clientPhoneNumber" header="Tell">
                 <template #body="slotProps">
@@ -23,7 +23,7 @@
 
             <Column header="Mahsulot">
                 <template #body="slotProps">
-                    {{ slotProps.data.mix?.title || '—' }}
+                    {{ slotProps.data.product?.name || '—' }}
                 </template>
             </Column>
 
@@ -63,7 +63,7 @@
 
         <div class="flex items-center gap-4 mb-4">
             <label class="font-semibold w-24">F.I.Sh</label>
-            <InputText v-model="payed.fullName" class="flex-auto" disabled />
+            <InputText v-model="payed.name" class="flex-auto" disabled />
         </div>
 
         <div class="flex items-center gap-4 mb-4">
@@ -107,7 +107,7 @@ const fetchDebetdata = async () => {
         const year = props.date.getFullYear();
         const month = props.date.getMonth() + 1;
 
-        const res = await axios.get(`/api/statistics/debtors-mix?year=${year}&month=${month}`);
+        const res = await axios.get(`/api/statistics/debtors-product?year=${year}&month=${month}`);
         deptors.value = res.data.debtors || [];
         totalDebt.value = res.data.totalDebt;
     } catch (err) {
@@ -124,7 +124,7 @@ const toggleModal = (item) => {
 
 const handlePay = async () => {
     try {
-        await axios.patch(`/api/mix/${payed.value._id}/payDebt`, {
+        await axios.patch(`/api/product-history/${payed.value._id}/payDebt`, {
             amount: payedAmount.value
         });
         visible.value = false;
